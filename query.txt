@@ -1,0 +1,3 @@
+SELECT * FROM detail_pengadaan JOIN detail_perencanaan ON detail_pengadaan.kode_detail_perencanaan = detail_perencanaan.kode_detail_perencanaan WHERE detail_pengadaan.kode_pengadaan = 'PD20210406';
+
+SELECT LPAD( max( substr( id, 5 ) ) +1, 4, '0' ) FROM tablename
