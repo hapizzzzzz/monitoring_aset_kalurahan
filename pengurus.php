@@ -12,7 +12,7 @@
 	<thead>
 		<tr>
 			<th><center>No.</center></th>
-			<th><center>Nomor Anggota</center></th>
+			<th><center>Nomor Pengurus</center></th>
 			<th><center>Nama Pengurus</center></th>
 			<th><center>Nomor Telp</center></th>
 			<th><center>Posisi</center></th>
