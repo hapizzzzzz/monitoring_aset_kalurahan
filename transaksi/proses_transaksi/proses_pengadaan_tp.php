@@ -17,10 +17,7 @@ if(isset($_POST['bSimpan'])){
 
 if($data['jmltpkode'] < 1){
 
-    // $tanggal = $date->format('d-m-Y');
-    // $urutan = 1;
     $urutan = sprintf("%04s", 1);
-    // $dptkode = $tanggal;
 
     $kodepdtp = "PT".$dptptahun.$urutan;
 
@@ -46,7 +43,6 @@ if($data['jmltpkode'] < 1){
     if($data_ada_tahun['kodeadatahun'] < 1){
 
         $urutan_tahun_baru = sprintf("%04s", 1);
-        // $dptkode = $tanggal;
 
         $kodepdtp_taru = "PT".$dptptahun.$urutan_tahun_baru;
 
@@ -59,8 +55,6 @@ if($data['jmltpkode'] < 1){
                 '$dptptahun')");
             
         echo "<script>document.location='../../menu.php?page=pengadaan_tp';</script>";
-
-        // echo $dptptahun;
     
     } else {
         
@@ -71,11 +65,8 @@ if($data['jmltpkode'] < 1){
             $kodey[] = $jmlkodex['SUBSTR(kode_pengadaan_tp,6)'];
         }
 
-        // var_dump($kodey);
-
         $kodeyintegerIDs = array_map('intval', $kodey);
 
-        // var_dump($kodeyintegerIDs);
 
         $kode_terakhir = max($kodeyintegerIDs);
 
@@ -85,16 +76,6 @@ if($data['jmltpkode'] < 1){
 
         $kode_baru = "PT".$dptptahun.$kode_urutan_baru;
 
-
-        // $numUsers = $jmlkodex['jml_kode_ada'];
-
-        // // var_dump($jmlkodex);
-        // echo $numUsers;
-
-        // $urutan_x = $jmlkodex['jml_kode_ada']+1;
-        // $urutan_baru = sprintf("%04s", $urutan_x);
-
-        // $kode_baru = "PT".$dptptahun.$urutan_baru;
         
         $tambah_data = $con->query("INSERT INTO pengadaan_tp (
         kode_pengadaan_tp,

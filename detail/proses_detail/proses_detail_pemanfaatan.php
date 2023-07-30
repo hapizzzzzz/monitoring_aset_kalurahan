@@ -14,6 +14,8 @@ if(isset($_POST['bSimpan'])){
     $awal_periode_pemanfaatan = $_POST['awal_periode_pemanfaatan'];
     $akhir_periode_pemanfaatan = $_POST['akhir_periode_pemanfaatan'];
 
+    $dkpn = substr($kode_pemanfaatan, 2);
+
     $cek_kuota=$con->query("SELECT jumlah_kuota FROM kuota_aset WHERE kode_inventaris = '$pilihan_aset'");
     $jml_kuota = mysqli_fetch_assoc($cek_kuota);
 
@@ -31,11 +33,11 @@ if(isset($_POST['bSimpan'])){
                     </script>";
         } else {
     
-            $cek_kode_pemanfaatan = $con->query("SELECT COUNT(kode_detail_pemanfaatan) AS jumkdp FROM detail_pemanfaatan");
+            $cek_kode_pemanfaatan = $con->query("SELECT COUNT(kode_detail_pemanfaatan) AS jumkdp FROM detail_pemanfaatan WHERE kode_pemanfaatan = '$kode_pemanfaatan'");
             $jumkdp = mysqli_fetch_assoc($cek_kode_pemanfaatan);
             
             if($jumkdp['jumkdp'] < 1){
-                $kode_detail_pemanfaatan = "DPN0000001";
+                $kode_detail_pemanfaatan = "DN".$dkpn."00001";
 
                 $namabaru_surat_perjanjian = "Surat perjanjian_".$kode_detail_pemanfaatan.".pdf";
         
@@ -94,7 +96,7 @@ if(isset($_POST['bSimpan'])){
 
                 $kode_dpn = array();
 
-                $cek_kode_ada = $con->query("SELECT SUBSTR(kode_detail_pemanfaatan, 4) AS kode_detail_pemanfaatan FROM detail_pemanfaatan WHERE kode_pemanfaatan = '$kode_pemanfaatan'");
+                $cek_kode_ada = $con->query("SELECT SUBSTR(kode_detail_pemanfaatan, 8) AS kode_detail_pemanfaatan FROM detail_pemanfaatan WHERE kode_pemanfaatan = '$kode_pemanfaatan'");
                 
                 while($data_kode_ada = mysqli_fetch_assoc($cek_kode_ada)){
                     $kode_dpn[] = $data_kode_ada['kode_detail_pemanfaatan'];
@@ -106,9 +108,9 @@ if(isset($_POST['bSimpan'])){
 
                 $urutan_baru = $kode_terakhir_dpn + 1;
 
-                $data_urutan_baru = sprintf('%07d', $urutan_baru);
+                $data_urutan_baru = sprintf('%05d', $urutan_baru);
 
-                $kode_dpn_baru = "DPN".$data_urutan_baru;
+                $kode_dpn_baru = "DN".$dkpn.$data_urutan_baru;
 
                 $namabaru_surat_perjanjian = "Surat perjanjian_".$kode_dpn_baru.".pdf";
         
@@ -258,6 +260,179 @@ if(isset($_POST['bHapusTP'])){
                 alert('Terjadi kesalahan dalam menghapus detail pemanfaatan !');
                 document.location='../../menu.php?page=detail_pemanfaatan&kode_pemanfaatan=$kode_pemanfaatan';
             </script>";
+    }
+
+}
+
+if (isset($_POST['bUbah'])) {
+
+    $enama_surat_perjanjian = $_FILES['e_file']['name'];
+    $elokasi_surat_perjanjian = $_FILES['e_file']['tmp_name'];
+
+    if ($enama_surat_perjanjian == "") {
+     
+        $kode_pemanfaatan = $_POST['kode_pemanfaatan'];
+        $kode_detail_pemanfaatan = $_POST['e_kode_detail_pemanfaatan'];
+        $bentuk_pemanfaatan = $_POST['e_bentuk_pemanfaatan'];
+        $no_surat_perjanjian = $_POST['e_no_surat_perjanjian'];
+        $biaya_kontribusi = $_POST['e_biaya_kontribusi'];
+        $keterangan = $_POST['e_keterangan'];
+        $awal_periode_pemanfaatan = $_POST['e_awal_periode_pemanfaatan'];
+        $akhir_periode_pemanfaatan = $_POST['e_akhir_periode_pemanfaatan'];
+
+        $ubah_dp = $con->query("UPDATE detail_pemanfaatan SET
+            bentuk_pemanfaatan = '$bentuk_pemanfaatan',
+            no_surat_perjanjian = '$no_surat_perjanjian',
+            biaya_kontribusi = '$biaya_kontribusi',
+            keterangan_pemanfaatan = '$keterangan',
+            awal_pemanfaatan = '$awal_periode_pemanfaatan',
+            akhir_pemanfaatan = '$akhir_periode_pemanfaatan'
+            WHERE kode_detail_pemanfaatan = '$kode_detail_pemanfaatan'");
+
+        if ($ubah_dp) {
+            echo "<script>
+                    document.location='../../menu.php?page=detail_pemanfaatan&kode_pemanfaatan=$kode_pemanfaatan';
+                </script>";
+        } else {
+            echo "<script>
+                    alert('Terjadi gangguan dalam mengedit detail pemanfaatan !');
+                    document.location='../../menu.php?page=detail_pemanfaatan&kode_pemanfaatan=$kode_pemanfaatan';
+                </script>";
+        }
+
+    } else {
+
+        $kode_pemanfaatan = $_POST['kode_pemanfaatan'];
+        $kode_detail_pemanfaatan = $_POST['e_kode_detail_pemanfaatan'];
+        $bentuk_pemanfaatan = $_POST['e_bentuk_pemanfaatan'];
+        $no_surat_perjanjian = $_POST['e_no_surat_perjanjian'];
+        $biaya_kontribusi = $_POST['e_biaya_kontribusi'];
+        $keterangan = $_POST['e_keterangan'];
+        $awal_periode_pemanfaatan = $_POST['e_awal_periode_pemanfaatan'];
+        $akhir_periode_pemanfaatan = $_POST['e_akhir_periode_pemanfaatan'];
+
+        $file_sp = $con->query("SELECT file_pemanfaatan FROM detail_pemanfaatan WHERE kode_detail_pemanfaatan = '$kode_detail_pemanfaatan'");
+        $data_file_sp = mysqli_fetch_assoc($file_sp);
+        $hdata_file_sp = $data_file_sp['file_pemanfaatan'];
+
+        $lokasi_file = '../../file_pemanfaatan/'.$hdata_file_sp;
+        $status=unlink($lokasi_file);
+
+        if($status){
+
+            $namabaru_surat_perjanjian = "Surat perjanjian_".$kode_detail_pemanfaatan.".pdf";
+
+            move_uploaded_file($elokasi_surat_perjanjian, "../../file_pemanfaatan/".$namabaru_surat_perjanjian);
+
+            $ubah_dp = $con->query("UPDATE detail_pemanfaatan SET
+            bentuk_pemanfaatan = '$bentuk_pemanfaatan',
+            no_surat_perjanjian = '$no_surat_perjanjian',
+            biaya_kontribusi = '$biaya_kontribusi',
+            keterangan_pemanfaatan = '$keterangan',
+            awal_pemanfaatan = '$awal_periode_pemanfaatan',
+            akhir_pemanfaatan = '$akhir_periode_pemanfaatan'
+            WHERE kode_detail_pemanfaatan = '$kode_detail_pemanfaatan'");
+
+            if ($ubah_dp) {
+                echo "<script>
+                        document.location='../../menu.php?page=detail_pemanfaatan&kode_pemanfaatan=$kode_pemanfaatan';
+                    </script>";
+            } else {
+                echo "<script>
+                        alert('Terjadi gangguan dalam mengedit detail pemanfaatan !');
+                        document.location='../../menu.php?page=detail_pemanfaatan&kode_pemanfaatan=$kode_pemanfaatan';
+                    </script>";
+            }
+
+        }
+
+    }
+
+}
+
+
+if (isset($_POST['bUbahTP'])) {
+
+    $enama_surat_perjanjian = $_FILES['e_file_tp']['name'];
+    $elokasi_surat_perjanjian = $_FILES['e_file_tp']['tmp_name'];
+
+    if ($enama_surat_perjanjian == "") {
+     
+        $kode_pemanfaatan = $_POST['kode_pemanfaatan'];
+        $kode_detail_pemanfaatan = $_POST['e_kode_detail_pemanfaatan_tp'];
+        $bentuk_pemanfaatan = $_POST['e_bentuk_pemanfaatan_tp'];
+        $no_surat_perjanjian = $_POST['e_no_surat_perjanjian_tp'];
+        $biaya_kontribusi = $_POST['e_biaya_kontribusi_tp'];
+        $keterangan = $_POST['e_keterangan_tp'];
+        $awal_periode_pemanfaatan = $_POST['e_awal_periode_pemanfaatan_tp'];
+        $akhir_periode_pemanfaatan = $_POST['e_akhir_periode_pemanfaatan_tp'];
+
+        $ubah_dp = $con->query("UPDATE detail_pemanfaatan SET
+            bentuk_pemanfaatan = '$bentuk_pemanfaatan',
+            no_surat_perjanjian = '$no_surat_perjanjian',
+            biaya_kontribusi = '$biaya_kontribusi',
+            keterangan_pemanfaatan = '$keterangan',
+            awal_pemanfaatan = '$awal_periode_pemanfaatan',
+            akhir_pemanfaatan = '$akhir_periode_pemanfaatan'
+            WHERE kode_detail_pemanfaatan = '$kode_detail_pemanfaatan'");
+
+        if ($ubah_dp) {
+            echo "<script>
+                    document.location='../../menu.php?page=detail_pemanfaatan&kode_pemanfaatan=$kode_pemanfaatan';
+                </script>";
+        } else {
+            echo "<script>
+                    alert('Terjadi gangguan dalam mengedit detail pemanfaatan !');
+                    document.location='../../menu.php?page=detail_pemanfaatan&kode_pemanfaatan=$kode_pemanfaatan';
+                </script>";
+        }
+
+    } else {
+
+        $kode_pemanfaatan = $_POST['kode_pemanfaatan'];
+        $kode_detail_pemanfaatan = $_POST['e_kode_detail_pemanfaatan_tp'];
+        $bentuk_pemanfaatan = $_POST['e_bentuk_pemanfaatan_tp'];
+        $no_surat_perjanjian = $_POST['e_no_surat_perjanjian_tp'];
+        $biaya_kontribusi = $_POST['e_biaya_kontribusi_tp'];
+        $keterangan = $_POST['e_keterangan_tp'];
+        $awal_periode_pemanfaatan = $_POST['e_awal_periode_pemanfaatan_tp'];
+        $akhir_periode_pemanfaatan = $_POST['e_akhir_periode_pemanfaatan_tp'];
+
+        $file_sp = $con->query("SELECT file_pemanfaatan FROM detail_pemanfaatan WHERE kode_detail_pemanfaatan = '$kode_detail_pemanfaatan'");
+        $data_file_sp = mysqli_fetch_assoc($file_sp);
+        $hdata_file_sp = $data_file_sp['file_pemanfaatan'];
+
+        $lokasi_file = '../../file_pemanfaatan/'.$hdata_file_sp;
+        $status=unlink($lokasi_file);
+
+        if($status){
+
+            $namabaru_surat_perjanjian = "Surat perjanjian_".$kode_detail_pemanfaatan.".pdf";
+
+            move_uploaded_file($elokasi_surat_perjanjian, "../../file_pemanfaatan/".$namabaru_surat_perjanjian);
+
+            $ubah_dp = $con->query("UPDATE detail_pemanfaatan SET
+            bentuk_pemanfaatan = '$bentuk_pemanfaatan',
+            no_surat_perjanjian = '$no_surat_perjanjian',
+            biaya_kontribusi = '$biaya_kontribusi',
+            keterangan_pemanfaatan = '$keterangan',
+            awal_pemanfaatan = '$awal_periode_pemanfaatan',
+            akhir_pemanfaatan = '$akhir_periode_pemanfaatan'
+            WHERE kode_detail_pemanfaatan = '$kode_detail_pemanfaatan'");
+
+            if ($ubah_dp) {
+                echo "<script>
+                        document.location='../../menu.php?page=detail_pemanfaatan&kode_pemanfaatan=$kode_pemanfaatan';
+                    </script>";
+            } else {
+                echo "<script>
+                        alert('Terjadi gangguan dalam mengedit detail pemanfaatan !');
+                        document.location='../../menu.php?page=detail_pemanfaatan&kode_pemanfaatan=$kode_pemanfaatan';
+                    </script>";
+            }
+
+        }
+
     }
 
 }

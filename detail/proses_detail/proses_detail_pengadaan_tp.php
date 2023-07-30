@@ -19,8 +19,10 @@ $pengurus_tp = $_POST['pengurus_tp'];
 $cek_ada = $con->query("SELECT COUNT(kode_detail_pengadaan_tp) AS cek_ada FROM detail_pengadaan_tp WHERE kode_pengadaan_tp = '$kode_pengadaan_tp'");
 $data_cek_ada = $cek_ada->fetch_array();
 
+$kp_tp = substr($kode_pengadaan_tp, 4);
+
 if ($data_cek_ada['cek_ada'] < 1){
-    $kode_detail_pengadaan_tp = 'D'.$kode_pengadaan_tp.'1';
+    $kode_detail_pengadaan_tp = 'DT'.$kp_tp.'00001';
 
     $pj = $con->query("SELECT*FROM pengurus WHERE nomor_pengurus = '$pengurus_tp'");
     $data_pj = $pj->fetch_assoc();
@@ -66,18 +68,18 @@ if ($data_cek_ada['cek_ada'] < 1){
 
     $data_kode = array();
 
-    $ksebelumnya = $con->query("SELECT kode_detail_pengadaan_tp, SUBSTR(kode_detail_pengadaan_tp,4) FROM detail_pengadaan_tp WHERE kode_pengadaan_tp = '$kode_pengadaan_tp'");
+    $ksebelumnya = $con->query("SELECT kode_detail_pengadaan_tp, SUBSTR(kode_detail_pengadaan_tp,9) AS ksebelumnya FROM detail_pengadaan_tp WHERE kode_pengadaan_tp = '$kode_pengadaan_tp'");
     while($dkode=mysqli_fetch_assoc($ksebelumnya)){
-        $data_kode[] = $dkode['SUBSTR(kode_detail_pengadaan_tp,4)'];
+        $data_kode[] = $dkode['ksebelumnya'];
     }
 
     $kodeyintegerIDs = array_map('intval', $data_kode);
 
-    // var_dump($kodeyintegerIDs);
+    $kode_terakhir = max($kodeyintegerIDs) + 1;
 
-    $kode_terakhir = max($kodeyintegerIDs);
+    $kode_urutan_baru = sprintf('%05d', $kode_terakhir);
 
-    $kode_detail_pengadaan_tp = "DPT".$kode_terakhir+1;;
+    $kode_detail_pengadaan_tp = "DT".$kp_tp.$kode_urutan_baru;
 
     $pj = $con->query("SELECT*FROM pengurus WHERE nomor_pengurus = '$pengurus_tp'");
     $data_pj = $pj->fetch_assoc();

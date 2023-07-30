@@ -9,6 +9,8 @@ if(isset($_POST['bSimpan'])){
     $keterangan_pg = $_POST['keterangan_pg'];
     $kode_penggunaan = $_POST['tkode_penggunaan'];
 
+    $kpg = substr($kode_penggunaan, 2);
+
     $cek_kuota= $con->query("SELECT jumlah_kuota FROM kuota_aset WHERE kode_inventaris = '$pilihan_aset'");
     $sisa_kuota = mysqli_fetch_assoc($cek_kuota);
     
@@ -18,12 +20,12 @@ if(isset($_POST['bSimpan'])){
                 document.location='../../menu.php?page=detail_penggunaan&kode_penggunaan=$kode_penggunaan';
               </script>";
     } else {
-        $cek_u_dpg = $con->query("SELECT COUNT(kode_detail_penggunaan) AS jumdpg FROM detail_penggunaan");
+        $cek_u_dpg = $con->query("SELECT COUNT(kode_detail_penggunaan) AS jumdpg FROM detail_penggunaan WHERE kode_penggunaan = '$kode_penggunaan'");
         $u_dpg_akhir = mysqli_fetch_assoc($cek_u_dpg);
 
         if($u_dpg_akhir['jumdpg'] < 1){
 
-            $kode_dpg = "DPG0000001";
+            $kode_dpg = "DG".$kpg."00001";
 
             $simpan_penggunaan = $con->query("INSERT INTO detail_penggunaan (
                 kode_penggunaan,
@@ -66,7 +68,7 @@ if(isset($_POST['bSimpan'])){
 
             $data_kode_dpg = array();
 
-            $cek_detail_pg = $con->query("SELECT SUBSTR(kode_detail_penggunaan,4,7) AS kdpg FROM detail_penggunaan");
+            $cek_detail_pg = $con->query("SELECT SUBSTR(kode_detail_penggunaan,8,5) AS kdpg FROM detail_penggunaan WHERE kode_penggunaan = '$kode_penggunaan'");
             while($data_detail_pg=$cek_detail_pg->fetch_assoc()){
                 $data_kode_dpg[] = $data_detail_pg['kdpg'];
             }
@@ -77,9 +79,9 @@ if(isset($_POST['bSimpan'])){
 
             $kdpg_baru = $kdpg_akhir + 1;
 
-            $kdpg_urutan_baru = sprintf('%07d', $kdpg_baru);
+            $kdpg_urutan_baru = sprintf('%05d', $kdpg_baru);
 
-            $kode_dpg = "DPG".$kdpg_urutan_baru;
+            $kode_dpg = "DG".$kpg.$kdpg_urutan_baru;
 
             $simpan_penggunaan = $con->query("INSERT INTO detail_penggunaan (
                 kode_penggunaan,

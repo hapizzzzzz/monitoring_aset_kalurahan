@@ -67,13 +67,17 @@
 			<td><center><?php echo $pecah_tp['keterangan_penggunaan']?></center></td>
 			<td><center>
 				
-				<!-- Button trigger modal hapus barang -->
+				<!-- Button trigger modal hapus Penggunaan -->
 				<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalHapusTP<?=$nomor?>" data-toggle="tooltip" data-placement="top" title="Hapus">
 					<i class="bi bi-trash"></i>
 				</button>
-				<!-- Button trigger modal edit barang -->
+				<!-- Button trigger modal edit Penggunaan -->
 				<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditTP<?=$nomor?>" data-toggle="tooltip" data-placement="top" title="Edit">
 					<i class="bi bi-pencil"></i>
+				</button>
+				<!-- Button trigger modal rincian Penggunaan -->
+				<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalrincian<?=$nomor?>" data-toggle="tooltip" data-placement="top" title="Rincian">
+					<i class="bi bi-card-list"></i>
 				</button>
 				
 			</td></center>
@@ -143,6 +147,42 @@
 		</div>
 		</div>
 		<!--  Akhir Modal Edit PenggunaanTP-->
+
+		<!-- Awal Modal Rincian Barang-->
+		<div class="modal fade" id="modalrincian<?=$nomor?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" class="text-danger" id="staticBackdropLabel">Detail Penggunaan</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<h6><b>Kode Pengadaan / Perolehan : </b></h6>
+				<h5 class="ddpd"><?=$pecah_tp['kode_detail_pengadaan']?></h5>
+				<hr>
+				<h6><b>Kode Inventaris : </b></h6>
+				<h5 class="ddpd"><?=$pecah_tp['kode_inventaris']?></h5>
+				<hr>
+				<h6><b>Nama Barang : </b></h6>
+				<h5 class="ddpd"><?=$pecah_tp['nama_barang_tp']?></h5>
+				<hr>
+				<h6><b>Jumlah : </b></h6>
+				<h5 class="ddpd"><?= $pecah_tp['jumlah_pg']." ".$pecah_tp['satuan']?></h5>
+				<hr>
+				<h6><b>Identitas : </b></h6>
+				<h5 class="ddpd"><?=$pecah_tp['identitas_barang']?></h5>
+				<hr>
+				<h6><b>Keterangan : </b></h6>
+				<h5 class="ddpd"><?=$pecah_tp['keterangan_penggunaan']?></h5>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+			</div>
+			</form>
+			</div>
+		</div>
+		</div>
+		<!--  Akhir Modal Rincian Barang-->
 		
 		<?php }?>
 
@@ -158,13 +198,17 @@
 			<td><center><?php echo $pecah['keterangan_penggunaan']?></center></td>
 			<td><center>
 				
-				<!-- Button trigger modal hapus barang -->
+				<!-- Button trigger modal hapus Penggunaan -->
 				<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalHapus<?=$nomor?>" data-toggle="tooltip" data-placement="top" title="Hapus">
 					<i class="bi bi-trash"></i>
 				</button>
-				<!-- Button trigger modal edit barang -->
+				<!-- Button trigger modal edit Penggunaan -->
 				<button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#modalEdit<?=$nomor?>" data-toggle="tooltip" data-placement="top" title="Edit">
 					<i class="bi bi-pencil"></i>
+				</button>
+				<!-- Button trigger modal rincian Penggunaan -->
+				<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalrincian<?=$nomor?>" data-toggle="tooltip" data-placement="top" title="Rincian">
+					<i class="bi bi-card-list"></i>
 				</button>
 				
 			</td></center>
@@ -213,7 +257,7 @@
 			<input type="hidden" name="epg_kode_dpg" value="<?=$pecah['kode_detail_penggunaan']?>">
 			<input type="hidden" name="kode_penggunaan" value="<?=$kode_penggunaan?>">
 					<div class="mb-3">
-						<label class="form-label"><b>Penggunan</b></label>
+						<label class="form-label"><b>Penggunaan</b></label>
 						<input type="text" class="form-control" value="<?=$pecah['aset_perencanaan']." - ".$pecah['jumlah_pg']." ".$pecah['satuan']?>" style="background: #efefef; pointer-events: none;">
 					</div>
 					<div class="mb-3">
@@ -234,6 +278,43 @@
 		</div>
 		</div>
 		<!--  Akhir Modal Edit Penggunaan-->
+
+
+		<!-- Awal Modal Rincian Penggunaan-->
+		<div class="modal fade" id="modalrincian<?=$nomor?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" class="text-danger" id="staticBackdropLabel">Detail Penggunaan</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<h6><b>Kode Pengadaan / Perolehan : </b></h6>
+				<h5 class="ddpd"><?=$pecah['kode_detail_pengadaan']?></h5>
+				<hr>
+				<h6><b>Kode Inventaris : </b></h6>
+				<h5 class="ddpd"><?=$pecah['kode_inventaris']?></h5>
+				<hr>
+				<h6><b>Nama Barang : </b></h6>
+				<h5 class="ddpd"><?=$pecah['aset_perencanaan']?></h5>
+				<hr>
+				<h6><b>Jumlah : </b></h6>
+				<h5 class="ddpd"><?= $pecah['jumlah_pg']." ".$pecah['satuan']?></h5>
+				<hr>
+				<h6><b>Identitas : </b></h6>
+				<h5 class="ddpd"><?=$pecah['identitas_barang']?></h5>
+				<hr>
+				<h6><b>Keterangan : </b></h6>
+				<h5 class="ddpd"><?=$pecah['keterangan_penggunaan']?></h5>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-success" data-bs-dismiss="modal">OK</button>
+			</div>
+			</form>
+			</div>
+		</div>
+		</div>
+		<!--  Akhir Modal Rincian Penggunaan-->
 
 		<?php }?>
 	</tbody>

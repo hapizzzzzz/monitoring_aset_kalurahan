@@ -2,7 +2,11 @@
         <center><h3 class="judul">Daftar Perencanaan</h3></center>
 </div>
 <div class="container">
-	<a href="menu.php?page=tambah_perencanaan" class="btn btn-primary" style="margin-bottom: 3%; font-size: 15px; border-radius: 10px; width: 15%"><i class="bi bi-plus-circle"></i>Tambah Data</a>
+
+	<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah" style="margin-bottom: 3%; font-size: 15px; border-radius: 10px; width: 15%">
+		<i class="bi bi-plus-circle"></i>Tambah Data
+    </button>
+
     <table class="table table-sm" cellspacing="0" width="100%" id="table" style="margin-top: 20px;">
 	<thead>
 		<tr>
@@ -84,10 +88,6 @@
 	  				<form method="POST" action="transaksi/proses_transaksi/proses_perencanaan.php?kode_perencanaan=<?php echo $pecah['kode_perencanaan'];?>">
       					<div class="modal-body">
 							<div class="mb-3">
-    							<label class="form-label"><b>Kode</b></label>
-    							<input type="text" class="form-control" name="pkode" value="<?=$pecah['kode_perencanaan']?>" style="background: #efefef; pointer-events: none;">
-  							</div>
-							<div class="mb-3">
     							<label class="form-label"><b>Periode RPJM</b></label>
     							<input type="text" class="form-control" name="ptahunrkp" value="<?= $pecah['periode_rpjm']?>" style="background: #efefef; pointer-events: none;">
   							</div>	
@@ -125,4 +125,64 @@
 		<?php }?>
 	</tbody>
 </table>
+
+		<!-- Awal Modal Tambah Pemanfaatan-->
+		<div class="modal fade modal-lg" id="modalTambah" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="staticBackdropLabel">Tambah Perencanaan</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form method="POST" action="transaksi/proses_transaksi/proses_perencanaan.php" enctype="multipart/form-data">
+			<div class="modal-body">
+				<div class="mb-3">
+					<table style="width: 100%">
+						<tr>
+							<td><label class="form-label"><b class="bold">No RPJM</b></label></td>
+							<td><label class="form-label"><b class="bold">Tanggal RPJM</b></label></td>
+						</tr>
+						<tr>
+							<td style="width: 50%"><input type="number" class="form-control" min="1" max="99" name="prno_rpjm" id="prno_rpjm" required></td>
+							<td style="width: 50%"><input type="date" class="form-control" name="prtgl_rpjm" id="prtgl_rpjm" required></td>
+						</tr>
+					</table>
+				</div>
+				<div class="mb-3">
+					<table style="width: 100%">
+						<tr>
+							<td><label class="form-label"><b class="bold">No RKP</b></label></td>
+							<td><label class="form-label"><b class="bold">Tanggal RKP</b></label></td>
+						</tr>
+						<tr>
+							<td style="width: 50%"><input type="number" class="form-control" min="1" max="99" name="prno_rkp" id="prno_rkp" required></td>
+							<td style="width: 50%"><input type="date" class="form-control" name="prtgl_rkp" id="prtgl_rkp" required></td>
+						</tr>
+					</table>
+				</div>
+				<div class="mb-3">
+					<label class="form-label"><b class="bold">Periode Tahun RPJM</b></label>
+					<table style="width: 100%">
+						<tr>
+							<td style="width:50%"><input type="number" class="form-control" min="1111" max="9999" name="prperiode_rpjmawal" id="prperiode_rpjmawal" required></td>
+							<td><b class="bold"> S/d </b></td>
+							<td style="width:50%"><input type="number" class="form-control" min="1111" max="9999" name="prperiode_rpjmakhir" id="prperiode_rpjmakhir" required></td>
+						</tr>
+					</table>
+				</div>
+				<div class="mb-3">
+					<label class="form-label"><b class="bold">Tahun RKP</b></label>
+					<input type="number" min="1900" max="2099" class="form-control" name="prthn_rkp" id="prthn_rkp" required>
+				</div>
+			</div>
+			<div class="modal-footer">
+			<button type="submit" class="btn btn-primary" name="bSimpan">Simpan</button>
+				<button type="button" class="btn btn-warning" data-bs-dismiss="modal">Batal</button>
+			</div>
+			</form>
+			</div>
+		</div>
+		</div>
+		<!--  Akhir Modal Tambah Pemanfaatan-->
+
 </div>

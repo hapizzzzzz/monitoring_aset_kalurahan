@@ -89,6 +89,9 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 	  <div class="modal-body">
+	  		<h6><b>Kode Pengadaan / Perolehan : </b></h6>
+			<h5 class="ddpd"><?=$pecah['kode_detail_pengadaan']?></h5>
+			<hr>
 			<h6><b>Kode Inventaris : </b></h6>
 			<h5 class="ddpd"><?=$pecah['kode_inventaris']?></h5>
 			<hr>
@@ -231,6 +234,9 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
 	  <div class="modal-body">
+	  		<h6><b>Kode Pengadaan / Perolehan : </b></h6>
+			<h5 class="ddpd"><?=$pecah_tp['kode_detail_pengadaan']?></h5>
+			<hr>
 			<h6><b>Kode Inventaris : </b></h6>
 			<h5 class="ddpd"><?=$pecah_tp['kode_inventaris']?></h5>
 			<hr>

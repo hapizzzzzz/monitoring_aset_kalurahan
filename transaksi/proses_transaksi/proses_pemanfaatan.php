@@ -17,7 +17,7 @@ if(isset($_POST['bSimpan'])){
     $data_pemanfaatan = mysqli_fetch_assoc($cek_pemanfaatan);
 
     if($data_pemanfaatan['jmlkpn'] < 1){
-        $kode_pemanfaatan = "PN00000001";
+        $kode_pemanfaatan = "PN00001";
         
         $simpan = $con->query("INSERT INTO pemanfaatan (
             kode_pemanfaatan,
@@ -62,7 +62,7 @@ if(isset($_POST['bSimpan'])){
 
         $urutan_baru = max($int_urutan_kode_pemanfaatan) + 1;
 
-        $kode_urutan = sprintf('%08d', $urutan_baru);
+        $kode_urutan = sprintf('%05d', $urutan_baru);
 
         $kode_pemanfaatan_baru = "PN".$kode_urutan;
 
@@ -103,20 +103,67 @@ if(isset($_POST['bSimpan'])){
 
 if(isset($_POST['bHapus'])){
 
-    $kode_pemanfaatan = $_POST['kode_pemanfaatan'];
-    $hapus = $con->query("DELETE FROM pemanfaatan WHERE kode_pemanfaatan = '$kode_pemanfaatan'");
+    function delete_pemanfaatan(){
 
-    if($hapus){
+        include('../../koneksi.php');
+        
+        $kode_pemanfaatan = $_POST['kode_pemanfaatan'];
+        $hapus = $con->query("DELETE FROM pemanfaatan WHERE kode_pemanfaatan = '$kode_pemanfaatan'");
 
-        echo "<script>
-                document.location='../../menu.php?page=pemanfaatan';
-            </script>";
-    } else {
-        echo "<script>
-                alert('Gagal Menghapus Data !');
-                document.location='../../menu.php?page=pemanfaatan';
-            </script>";
+        if($hapus){
+
+            echo "<script>
+                    document.location='../../menu.php?page=pemanfaatan';
+                </script>";
+        } else {
+            echo "<script>
+                    alert('Gagal Menghapus Data !');
+                    document.location='../../menu.php?page=pemanfaatan';
+                </script>";
+        }
     }
+
+    $cek_surat = $con->query("SELECT file_pemanfaatan FROM detail_pemanfaatan WHERE kode_pemanfaatan = '$_POST[kode_pemanfaatan]'");
+    
+    $cek_jumlah_barang = $con->query("SELECT kode_inventaris FROM detail_pemanfaatan WHERE kode_pemanfaatan = '$_POST[kode_pemanfaatan]'");
+    
+    $cek_detail = $con->query("SELECT COUNT(file_pemanfaatan) AS jmlpemanfaatan FROM detail_pemanfaatan WHERE kode_pemanfaatan = '$_POST[kode_pemanfaatan]'");
+    $jmh_detail = mysqli_fetch_assoc($cek_detail);
+
+    if ($jmh_detail['jmlpemanfaatan'] < 1) {
+        
+        delete_pemanfaatan();    
+    
+    } else {
+
+        while ($data_surat = mysqli_fetch_assoc($cek_surat)){
+
+            $lokasi_file = '../../file_pemanfaatan/'.$data_surat['file_pemanfaatan'];
+            $status=unlink($lokasi_file);
+    
+        }
+    
+        while ($data_jumlah_barang = mysqli_fetch_assoc($cek_jumlah_barang)){
+    
+            $cek_kuota = $con->query("SELECT kuota_aset.jumlah_kuota, detail_pemanfaatan.jumlah_aset_p FROM kuota_aset JOIN inventaris ON kuota_aset.kode_inventaris = inventaris.kode_inventaris JOIN detail_pemanfaatan ON inventaris.kode_inventaris = detail_pemanfaatan.kode_inventaris WHERE detail_pemanfaatan.kode_inventaris = '$data_jumlah_barang[kode_inventaris]'");
+            
+            while($data_kuota = mysqli_fetch_assoc($cek_kuota)){
+                
+                $sisa_kuota = $data_kuota['jumlah_kuota'];
+                $jumlah_barang_p = $data_kuota['jumlah_aset_p'];
+    
+                $pulih_kuota = $sisa_kuota + $jumlah_barang_p;
+                
+                $pulihkan_kuota = $con->query("UPDATE kuota_aset SET jumlah_kuota = '$pulih_kuota' WHERE kode_inventaris = '$data_jumlah_barang[kode_inventaris]'");
+    
+            }
+    
+        }
+
+        delete_pemanfaatan();
+
+    }
+
 }
 
 if(isset($_POST['bUbah'])){

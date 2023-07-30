@@ -12,24 +12,12 @@ $kekayaan_desa = $_POST['dpdkekayaandesa'];
 $tanggal_perolehan = $_POST['dpdtgl_perolehan'];
 $penanggung_jawab = $_POST['dpdpengurus'];
 
-// echo $apbdesa."<br>";
-// echo $perolehan_lain."<br>";
-// echo $kekayaan_desa."<br>";
-
 $pengurus = $con->query("SELECT * FROM pengurus WHERE nomor_pengurus = $penanggung_jawab");
 $data_pengurus = $pengurus->fetch_array();
 
 $kode_detail_pengadaan = substr($kode_detail_perencanaan,2);
 $kode_dp = "PDB".$kode_detail_pengadaan;
 
-// echo "Kode pengadaan = ".$kode_pengadaan."<br>";
-// echo "Kode detail perencanaan = ".$kode_detail_perencanaan."<br>";
-// echo "Kode detail pengadaan = ".$kode_dp."<br>";
-// echo "APBDesa = ".$apbdesa."<br>";
-// echo "Perolehan lain yg sah = ".$perolehan_lain."<br>";
-// echo "Aset / Kekayaan asli desa = ".$kekayaan_desa."<br>";
-// echo "Tanggal perolehan = ".$tanggal_perolehan."<br>";
-// echo "Penanggung jawab <br>";
 $no_pengurus = $data_pengurus['nomor_pengurus'];
 $nama_pegurus = $data_pengurus['nama_pengurus'];
 $hp_pengurus = $data_pengurus['no_hp'];
@@ -88,18 +76,7 @@ $tanggal_perolehan=="" || $penanggung_jawab==""){
             '$hp_pengurus')");
 
     if ($simpan) {
-    // $tambah_aset = $con->query("INSERT INTO inventaris (
-    //     kode_inventaris,
-    //     kode_detail_pengadaan,
-    //     jumlah,
-    //     satuan,
-    //     keterangan_aset) VALUES (
-    //         '$kode_inventaris',
-    //         '$kode_dp',
-    //         '$jumlah_barang_invetaris',
-    //         '$satuan_barang_inventaris',
-    //         '$keterangan_barang_inventaris')");
-            
+
     echo "<script>document.location='../../menu.php?page=detail_pengadaan&kode_pengadaan=$kode_pengadaan';</script>";
     }
 
@@ -150,16 +127,6 @@ if(isset($_POST['bUbah'])){
     $no_pengurus = $data_pengurus['nomor_pengurus'];
     $nama_pengurus = $data_pengurus['nama_pengurus'];
     $hp_pengurus = $data_pengurus['no_hp'];
-
-    // echo "kode_pengadaan = ".$kode_p."<br>";
-    // echo "kode_detail_pengadaan = ".$kode_dp."<br>";
-    // echo "apbdesa = ".$eapbdesa."<br>";
-    // echo "perolehan_lain = ".$eperolehanlain."<br>";
-    // echo "kekayaan_asli_desa = ".$ekekayaandesa."<br>";
-    // echo "tgl_perolehan = ".$etgl."<br>";
-    // echo "nomor_pengurus = ".$no_pengurus."<br>";
-    // echo "nama_pengurus = ".$nama_pengurus."<br>";
-    // echo "no_hp_pengurus = ".$hp_pengurus."<br>";
 
     $ubah = $con->query("UPDATE detail_pengadaan SET
         apbdesa = '$eapbdesa',

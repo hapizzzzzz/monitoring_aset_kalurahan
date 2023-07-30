@@ -7,16 +7,21 @@ if(isset($_POST['bSimpan'])){
     $kpori = $_POST['dpkode_perencanaan'];
     $kodeperencanaan = $_POST['dpkode_perencanaan']."1";
 
-    $kodeakhir = $con->query("SELECT SUBSTRING(kode_detail_perencanaan, 3) AS kodeadapr FROM detail_perencanaan WHERE kode_perencanaan = '$kpori'");
+    $kodeakhir = $con->query("SELECT SUBSTRING(kode_detail_perencanaan, 3, 4) AS kodeadapr FROM detail_perencanaan WHERE kode_perencanaan = '$kpori'");
     while ($kodesudah=$kodeakhir->fetch_assoc()) {
         $kodeadapr[] = $kodesudah['kodeadapr']."<br>";
     }
 
     $IDskodeadapr = array_map('intval', $kodeadapr);
 
-    // print_r($IDskodeadapr);
+    $tahun_rkp = $con->query("SELECT tahun_rkp FROM perencanaan WHERE kode_perencanaan = '$kpori'");
+    $data_tahun_rkp = mysqli_fetch_assoc($tahun_rkp);
+    $tahun_perencanaan = $data_tahun_rkp['tahun_rkp'];
 
-    if(empty($IDskodeadapr)){  
+    if(empty($IDskodeadapr)){
+
+        $kode_detail_perencanaan = "PR".$tahun_perencanaan."000001";
+        
         $simpan = $con->query("INSERT INTO detail_perencanaan (
             kode_detail_perencanaan,
             kode_perencanaan,
@@ -30,7 +35,7 @@ if(isset($_POST['bSimpan'])){
             perkiraan_biaya,
             bidang_perencanaan,
             keterangan) VALUES (
-                'PR$kodeperencanaan',
+                '$kode_detail_perencanaan',
                 '$kpori',
                 '$_POST[dpnamabarang]',
                 '$_POST[dpjeniskegiatan]',
@@ -43,8 +48,25 @@ if(isset($_POST['bSimpan'])){
                 '$_POST[dpbidang]',
                 '$_POST[dpketerangan]')");
     } else {
-    $kode_akhir_dpr = max($IDskodeadapr);
-    $kode_baru_dpr = max($IDskodeadapr) + 1;
+
+    $cek_kode_detail_perancanaan = $con->query("SELECT SUBSTR(kode_detail_perencanaan, 7) AS kdp FROM detail_perencanaan WHERE kode_perencanaan = '$kpori'");
+    
+    $data_kdp = [];
+
+    while($data_kode_detail_perencanaan = mysqli_fetch_assoc($cek_kode_detail_perancanaan)){
+        $data_kdp[] = $data_kode_detail_perencanaan['kdp'];
+    }
+
+    $int_data_kdp = array_map('intval', $data_kdp);
+
+    $urutan_terakhir = max($int_data_kdp);
+
+    $urutan_baru = $urutan_terakhir + 1;
+
+    $urutan_kode = sprintf('%06d', $urutan_baru);
+
+    $kode_baru_dpr = "PR".$tahun_perencanaan.$urutan_kode;
+    
     $simpan = $con->query("INSERT INTO detail_perencanaan (
             kode_detail_perencanaan,
             kode_perencanaan,
@@ -58,7 +80,7 @@ if(isset($_POST['bSimpan'])){
             perkiraan_biaya,
             bidang_perencanaan,
             keterangan) VALUES (
-                'PR$kode_baru_dpr',
+                '$kode_baru_dpr',
                 '$kpori',
                 '$_POST[dpnamabarang]',
                 '$_POST[dpjeniskegiatan]',

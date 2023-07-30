@@ -13,7 +13,7 @@ if(isset($_POST['bSimpan'])){
 
     if($jum_kode['jumkode'] < 1){
 
-        $kode_penggunaan_baru = "PG00000001";
+        $kode_penggunaan_baru = "PG00001";
 
         $simpan = $con->query("INSERT INTO penggunaan (kode_penggunaan, pengguna, lokasi) VALUES ('$kode_penggunaan_baru','$pengguna','$lokasi')");
 
@@ -35,22 +35,20 @@ if(isset($_POST['bSimpan'])){
 
             if($cek_penggunaan['jumpenggunaan'] < 1){
 
-                $cek_kode = $con->query("SELECT SUBSTR(kode_penggunaan, 3, 8) FROM penggunaan");
+                $cek_kode = $con->query("SELECT SUBSTR(kode_penggunaan, 3, 5) AS dkpg FROM penggunaan");
                 $kode_terakhir = array();
 
                 while($cek_kode_akhir = $cek_kode->fetch_assoc()){
-                    $kode_terakhir[] = $cek_kode_akhir['SUBSTR(kode_penggunaan, 3, 8)'];
+                    $kode_terakhir[] = $cek_kode_akhir['dkpg'];
                 }
 
                 $kode_pgIDs = array_map('intval', $kode_terakhir);
 
                 $kode_urutan_terakhir = max($kode_pgIDs);
 
-                // echo $kode_urutan_terakhir;
-
                 $kode_urutan_baru = $kode_urutan_terakhir + 1;
 
-                $kode_leading_baru = sprintf('%08d', $kode_urutan_baru);
+                $kode_leading_baru = sprintf('%05d', $kode_urutan_baru);
 
                 $kode_penggunaan_baru = "PG".$kode_leading_baru;
 
@@ -102,31 +100,16 @@ if(isset($_POST['bHapus'])){
 
     $kode = $_POST['kode_penggunaan'];
 
-    // $data_kode_dpg = array();
-    // $data_kode_inv = array();
-    // $data_jumlah_pg = array();
-
     $cek_detail_penggunaan = $con->query("SELECT * FROM detail_penggunaan WHERE kode_penggunaan = '$kode'");
     while($data_detail_penggunaan=$cek_detail_penggunaan->fetch_assoc()){
-        // $data_kode_dpg[] = $data_detail_penggunaan['kode_detail_penggunaan'];
-        // $data_kode_inv[] = $data_detail_penggunaan['kode_inventaris'];
-        // $data_jumlah_pg[] = $data_detail_penggunaan['jumlah_pg'];
-
-        ///////////
 
         $jum_dpg = array();
-        
-        ///////////
 
         $cek_jumlah_dpg = $con->query("SELECT jumlah_kuota FROM kuota_aset WHERE kode_inventaris = '$data_detail_penggunaan[kode_inventaris]'");
         while($jumlah_dpg=$cek_jumlah_dpg->fetch_assoc()){
             $jum_dpg = $jumlah_dpg['jumlah_kuota'];
         }
 
-
-        // $int_jumIDs = array_map('intval', $jum_dpg);
-
-        // $sisa_kuota = max($int_jumIDs);
 
         $kuota_inv = $jum_dpg + $data_detail_penggunaan['jumlah_pg'];;
 
@@ -137,13 +120,6 @@ if(isset($_POST['bHapus'])){
         }
 
     }
-
-    // var_dump($data_kode_dpg);
-    // echo "<br>";
-    // var_dump($data_kode_inv);
-    // echo "<br>";
-    // var_dump($data_jumlah_pg);
-    // echo "<br>";
 
     $hapus = $con->query("DELETE FROM penggunaan WHERE kode_penggunaan = '$kode'");
 

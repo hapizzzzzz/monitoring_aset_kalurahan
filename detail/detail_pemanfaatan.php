@@ -72,7 +72,7 @@
 			<td><center><?php echo $pecah['aset_perencanaan']?></center></td>
 			<td><center><?php echo $pecah['jumlah_aset_p'] ." ".$pecah['satuan']?></center></td>
 			<td><center><?php echo $pecah['bentuk_pemanfaatan']?></center></td>
-			<td><center><?php echo $pecah['awal_pemanfaatan']." Sd ".$pecah['akhir_pemanfaatan']?></center></td>
+			<td><center><?php echo date('d/m/Y', strtotime($pecah['awal_pemanfaatan']))." Sd ".date('d/m/Y', strtotime($pecah['akhir_pemanfaatan']))?></center></td>
 			<td><center>
 				
 				<!-- Button trigger modal hapus barang -->
@@ -86,6 +86,10 @@
 				<!-- Button trigger modal rincian barang -->
 				<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalrincian<?=$nomor?>" data-toggle="tooltip" data-placement="top" title="Rincian">
 					<i class="bi bi-card-list"></i>
+				</button>
+				<!-- Button trigger modal status -->
+				<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalStatus<?=$nomor?>" data-toggle="tooltip" data-placement="top" title="Transaksi Selesai">
+					<i class="bi bi-check-circle"></i>
 				</button>
 				
 			</td></center>
@@ -120,7 +124,68 @@
     				</div>
   				</div>
 			</div>
-		<!--  Akhir Modal Hapus Pemanfaatan-->
+		<!--  Akhir Modal Hapus Detail Pemanfaatan-->
+
+		<!-- Awal Modal Edit Detail Pemanfaatan-->
+		<div class="modal fade modal-lg" id="modalEdit<?=$nomor?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Pemanfaatan</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form method="POST" action="detail/proses_detail/proses_detail_pemanfaatan.php" enctype="multipart/form-data">
+			<div class="modal-body">
+				<div class="mb-3">
+					<input type="hidden" name="kode_pemanfaatan" value="<?=$kode_pemanfaatan?>">
+					<input type="hidden" name="e_kode_detail_pemanfaatan" value="<?=$pecah['kode_detail_pemanfaatan']?>">
+					<label class="form-label"><b>Nama Barang</b></label>
+					<input type="text" class="form-control" name="dpnamabarang" value="<?=$pecah['aset_perencanaan']." - ".$pecah['jumlah_aset_p']?>" style="background: #efefef; pointer-events: none;">
+				</div>
+				<div class="mb-3">
+					<label class="form-label"><b>Bentuk Pemanfaatan</b></label>
+					<select class="form-select" name="e_bentuk_pemanfaatan" style="width:100%">
+						<option value="<?= $pecah['bentuk_pemanfaatan']?>"><?= $pecah['bentuk_pemanfaatan']?></option>
+						<option value="Sewa">Sewa</option>
+						<option value="Pinjam pakai">Pinjam Pakai</option>
+						<option value="Kerja sama">Kerja Sama</option>
+						<option value="Bangun serah guna / Bangun guna serah">Bangun Serah Guna / Bangun Guna Serah</option>
+					</select>
+				</div>
+				<div class="mb-3">
+					<label class="form-label"><b>No Surat Perjanjian</b></label>
+					<input type="text" class="form-control" name="e_no_surat_perjanjian" value ="<?= $pecah['no_surat_perjanjian']?>" required>
+				</div>
+				<div class="mb-3">
+					<label class="form-label"><b class="bold">File Pemanfaatan (.pdf)</b></label>
+					<input type="file" class="form-control" name="e_file">
+				</div>
+				<div class="mb-3">
+					<label class="form-label"><b>Biaya Kontribusi (Rp)</b></label>
+					<input type="number" min="0" max="99999999999" class="form-control" name="e_biaya_kontribusi" value="<?= $pecah['biaya_kontribusi']?>" required>
+				</div>
+				<div class="mb-3">
+					<label class="form-label"><b class="bold">Keterangan</b></label>
+					<textarea class="form-control" name="e_keterangan" rows="4" cols="50" style="resize: none;" required><?= $pecah['keterangan_pemanfaatan']?></textarea>
+				</div>
+				<div class="mb-3">
+					<label class="form-label"><b>Awal Jangka Waktu</b></label>
+					<input type="date" class="form-control" name="e_awal_periode_pemanfaatan" value="<?= $pecah['awal_pemanfaatan']?>" required>
+				</div>
+				<div class="mb-3">
+					<label class="form-label"><b>Akhir Jangka Waktu</b></label>
+					<input type="date" class="form-control" name="e_akhir_periode_pemanfaatan" value="<?= $pecah['akhir_pemanfaatan']?>" required>
+				</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary" name="bUbah">Ubah</button>
+					<button type="button" class="btn btn-warning" data-bs-dismiss="modal">Batal</button>
+				</div>
+			</form>
+			</div>
+		</div>
+		</div>
+		<!--  Akhir Modal Edit Detail Pemanfaatan-->
 
 		<!-- Awal Modal Rincian Pemanfaatan-->
 		<div class="modal fade" id="modalrincian<?=$nomor?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -131,8 +196,11 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<h6><b>Kode Detail Pemanfaatan : </b></h6>
-				<h5 class="ddpd"><?=$pecah['kode_detail_pemanfaatan']?></h5>
+				<h6><b>Kode Pengadaan / Perolehan : </b></h6>
+				<h5 class="ddpd"><?=$pecah['kode_detail_pengadaan']?></h5>
+				<hr>
+				<h6><b>Kode Inventaris : </b></h6>
+				<h5 class="ddpd"><?=$pecah['kode_inventaris']?></h5>
 				<hr>
 				<h6><b>Nama Aset : </b></h6>
 				<h5 class="ddpd"><?=$pecah['aset_perencanaan']?></h5>
@@ -147,7 +215,7 @@
 				<h5 class="ddpd"><?=$pecah['biaya_kontribusi'];?></h5>
 				<hr>
 				<h6><b>Jangka Waktu : </b></h6>
-				<h5 class="ddpd"><?=$pecah['awal_pemanfaatan']." Sd ".$pecah['akhir_pemanfaatan']?></h5>
+				<h5 class="ddpd"><?=date('d/m/Y', strtotime($pecah['awal_pemanfaatan']))." Sd ".date('d/m/Y', strtotime($pecah['akhir_pemanfaatan']))?></h5>
 				<hr>
 				<h6><b>Keterangan : </b></h6>
 				<h5 class="ddpd"><?=$pecah['keterangan_pemanfaatan']?></h5>
@@ -192,6 +260,10 @@
 				<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalrincianTP<?=$nomor?>" data-toggle="tooltip" data-placement="top" title="Rincian">
 					<i class="bi bi-card-list"></i>
 				</button>
+				<!-- Button trigger modal status -->
+				<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalStatus<?=$nomor?>" data-toggle="tooltip" data-placement="top" title="Transaksi Selesai">
+					<i class="bi bi-check-circle"></i>
+				</button>
 				
 				
 			</td></center>
@@ -229,6 +301,67 @@
 			</div>
 		<!--  Akhir Modal Hapus Detail Pemanfaatan TP-->
 
+		<!-- Awal Modal Edit Detail Pemanfaatan TP-->
+		<div class="modal fade modal-lg" id="modalEditTP<?=$nomor?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Pemanfaatan</h1>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form method="POST" action="detail/proses_detail/proses_detail_pemanfaatan.php" enctype="multipart/form-data">
+			<div class="modal-body">
+				<div class="mb-3">
+					<input type="hidden" name="kode_pemanfaatan" value="<?=$kode_pemanfaatan?>">
+					<input type="hidden" name="e_kode_detail_pemanfaatan_tp" value="<?=$pecah_tp['kode_detail_pemanfaatan']?>">
+					<label class="form-label"><b>Nama Barang</b></label>
+					<input type="text" class="form-control" value="<?=$pecah_tp['nama_barang_tp']." - ".$pecah_tp['jumlah_aset_p']?>" style="background: #efefef; pointer-events: none;">
+				</div>
+				<div class="mb-3">
+					<label class="form-label"><b>Bentuk Pemanfaatan</b></label>
+					<select class="form-select" name="e_bentuk_pemanfaatan_tp" style="width:100%">
+						<option value="<?= $pecah_tp['bentuk_pemanfaatan']?>"><?= $pecah_tp['bentuk_pemanfaatan']?></option>
+						<option value="Sewa">Sewa</option>
+						<option value="Pinjam pakai">Pinjam Pakai</option>
+						<option value="Kerja sama">Kerja Sama</option>
+						<option value="Bangun serah guna / Bangun guna serah">Bangun Serah Guna / Bangun Guna Serah</option>
+					</select>
+				</div>
+				<div class="mb-3">
+					<label class="form-label"><b>No Surat Perjanjian</b></label>
+					<input type="text" class="form-control" name="e_no_surat_perjanjian_tp" value ="<?= $pecah_tp['no_surat_perjanjian']?>" required>
+				</div>
+				<div class="mb-3">
+					<label class="form-label"><b class="bold">File Pemanfaatan (.pdf)</b></label>
+					<input type="file" class="form-control" name="e_file_tp">
+				</div>
+				<div class="mb-3">
+					<label class="form-label"><b>Biaya Kontribusi (Rp)</b></label>
+					<input type="number" min="0" max="99999999999" class="form-control" name="e_biaya_kontribusi_tp" value="<?= $pecah_tp['biaya_kontribusi']?>" required>
+				</div>
+				<div class="mb-3">
+					<label class="form-label"><b class="bold">Keterangan</b></label>
+					<textarea class="form-control" name="e_keterangan_tp" rows="4" cols="50" style="resize: none;" required><?= $pecah_tp['keterangan_pemanfaatan']?></textarea>
+				</div>
+				<div class="mb-3">
+					<label class="form-label"><b>Awal Jangka Waktu</b></label>
+					<input type="date" class="form-control" name="e_awal_periode_pemanfaatan_tp" value="<?= $pecah_tp['awal_pemanfaatan']?>" required>
+				</div>
+				<div class="mb-3">
+					<label class="form-label"><b>Akhir Jangka Waktu</b></label>
+					<input type="date" class="form-control" name="e_akhir_periode_pemanfaatan_tp" value="<?= $pecah_tp['akhir_pemanfaatan']?>" required>
+				</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary" name="bUbahTP">Ubah</button>
+					<button type="button" class="btn btn-warning" data-bs-dismiss="modal">Batal</button>
+				</div>
+			</form>
+			</div>
+		</div>
+		</div>
+		<!--  Akhir Modal Edit Detail Pemanfaatan TP-->
+
 		<!-- Awal Modal Rincian Detail Pemanfaatan TP-->
 		<div class="modal fade" id="modalrincianTP<?=$nomor?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -238,8 +371,11 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-					<h6><b>Kode Detail Pemanfaatan : </b></h6>
-					<h5 class="ddpd"><?=$pecah_tp['kode_detail_pemanfaatan']?></h5>
+					<h6><b>Kode Pengadaan / Perolehan : </b></h6>
+					<h5 class="ddpd"><?=$pecah_tp['kode_detail_pengadaan']?></h5>
+					<hr>
+					<h6><b>Kode Inventaris : </b></h6>
+					<h5 class="ddpd"><?=$pecah_tp['kode_inventaris']?></h5>
 					<hr>
 					<h6><b>Nama Aset : </b></h6>
 					<h5 class="ddpd"><?=$pecah_tp['nama_barang_tp']?></h5>
@@ -254,7 +390,7 @@
 					<h5 class="ddpd"><?=$pecah_tp['biaya_kontribusi'];?></h5>
 					<hr>
 					<h6><b>Jangka Waktu : </b></h6>
-					<h5 class="ddpd"><?=$pecah_tp['awal_pemanfaatan']." Sd ".$pecah_tp['akhir_pemanfaatan']?></h5>
+					<h5 class="ddpd"><?=date('d/m/Y', strtotime($pecah_tp['awal_pemanfaatan']))." Sd ".date('d/m/Y', strtotime($pecah_tp['akhir_pemanfaatan']))?></h5>
 					<hr>
 					<h6><b>Keterangan : </b></h6>
 					<h5 class="ddpd"><?=$pecah_tp['keterangan_pemanfaatan']?></h5>
