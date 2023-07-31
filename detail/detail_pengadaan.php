@@ -161,6 +161,8 @@
       <input type="hidden" name="dpdkode_detail_pengadaan" value="<?=$pecah['kode_detail_pengadaan']?>">
 	  <input type="hidden" name="dpdkode_pengadaan" value="<?=$kode_pengadaan?>">
 	  <div class="modal-body">
+
+	  		<h6 class="text-danger">*Semua data lain yang memiliki kaitan dengan dengan data ini akan dihapus !</h6><br>
 			
 			<h5 class="text-center">Data ini akan dihapus ?<br>
 				<span class="text-danger"><?= $pecah['kode_detail_pengadaan']?> - <?=$pecah['aset_perencanaan']?></span>

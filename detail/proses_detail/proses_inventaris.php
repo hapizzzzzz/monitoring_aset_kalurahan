@@ -188,32 +188,100 @@ if(isset($_POST['bUbahTP'])){
     }
 }
 
+if(isset($_POST['bHapus'])){
 
-if(isset($_POST['bHapus'])){ 
+    function hapus_inventaris(){
 
-    $hapus = $con->query("DELETE FROM inventaris WHERE kode_inventaris = '$_POST[kode_inventaris]'");
-    if($hapus){
-        echo "<script>
-                    document.location='../../menu.php?page=inventaris';
-              </script>";
+        include ('../../koneksi.php');
+
+        $hapus = $con->query("DELETE FROM inventaris WHERE kode_inventaris = '$_POST[kode_inventaris]'");
+        if($hapus){
+            echo "<script>
+                        document.location='../../menu.php?page=inventaris';
+                </script>";
+        } else {
+            echo "<script>
+                    alert('Gagal Hapus Data');
+                </script>";
+        }
+    }
+
+    $cek_file_pemanfaatan=$con->query("SELECT COUNT(file_pemanfaatan) AS jumlah_file FROM detail_pemanfaatan WHERE kode_inventaris = '$_POST[kode_inventaris]'");
+    $jumlah_file = mysqli_fetch_assoc($cek_file_pemanfaatan);
+
+    if($jumlah_file['jumlah_file'] < 1){
+
+        hapus_inventaris();
+
     } else {
-        echo "<script>
-                alert('Gagal Hapus Data');
-              </script>";
+
+        $file_pemanfaatan = $con->query("SELECT detail_pemanfaatan.file_pemanfaatan FROM detail_pemanfaatan JOIN inventaris ON detail_pemanfaatan.kode_inventaris = inventaris.kode_inventaris WHERE inventaris.kode_inventaris = '$_POST[kode_inventaris]'");
+    
+        while ($data_surat = mysqli_fetch_assoc($file_pemanfaatan)) {
+
+            $lokasi_file = '../../file_pemanfaatan/'.$data_surat['file_pemanfaatan'];
+            $status=unlink($lokasi_file);
+
+        }
+
+        if($status){
+            
+            hapus_inventaris();
+
+        } else {
+            echo "<script>
+                    alert('Gagal Hapus Data Pemanfaatan');
+                </script>";
+        }
+
     }
 }
 
-if(isset($_POST['bHapusTP'])){ 
+if(isset($_POST['bHapusTP'])){
 
-    $hapus = $con->query("DELETE FROM inventaris WHERE kode_inventaris = '$_POST[kode_inventaris_tp]'");
-    if($hapus){
-        echo "<script>
-                    document.location='../../menu.php?page=inventaris';
-              </script>";
+    function hapus_inventaris_tp(){
+
+        include ('../../koneksi.php');
+
+        $hapus = $con->query("DELETE FROM inventaris WHERE kode_inventaris = '$_POST[kode_inventaris]'");
+        if($hapus){
+            echo "<script>
+                        document.location='../../menu.php?page=inventaris';
+                </script>";
+        } else {
+            echo "<script>
+                    alert('Gagal Hapus Data');
+                </script>";
+        }
+    }
+
+    $cek_file_pemanfaatan=$con->query("SELECT COUNT(file_pemanfaatan) AS jumlah_file FROM detail_pemanfaatan WHERE kode_inventaris = '$_POST[kode_inventaris]'");
+    $jumlah_file = mysqli_fetch_assoc($cek_file_pemanfaatan);
+
+    if($jumlah_file['jumlah_file'] < 1){
+
+        hapus_inventaris_tp();
+
     } else {
-        echo "<script>
-                alert('Gagal Hapus Data');
-              </script>";
+
+        $file_pemanfaatan = $con->query("SELECT detail_pemanfaatan.file_pemanfaatan FROM detail_pemanfaatan JOIN inventaris ON detail_pemanfaatan.kode_inventaris = inventaris.kode_inventaris WHERE inventaris.kode_inventaris = '$_POST[kode_inventaris_tp]'");
+    
+        while ($data_surat = mysqli_fetch_assoc($file_pemanfaatan)) {
+
+            $lokasi_file = '../../file_pemanfaatan/'.$data_surat['file_pemanfaatan'];
+            $status=unlink($lokasi_file);
+
+        }
+
+        if($status){
+
+        hapus_inventaris_tp();
+
+        } else {
+            echo "<script>
+                        alert('Gagal Hapus Data Pemanfaatan');
+                    </script>";
+        }
     }
 }
     

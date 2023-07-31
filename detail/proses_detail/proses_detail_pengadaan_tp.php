@@ -126,20 +126,60 @@ if ($data_cek_ada['cek_ada'] < 1){
 
 if(isset($_POST['bHapus'])){
 
-    $kode_pengadaan_tp = $_POST['kode_pengadaan_tp'];
-    $kode_detail_pengadaan_tp = $_POST['kode_detail_pengadaan_tp'];
+    function hapus_detail_pengadaan_tp(){
 
-    $hapus = $con->query("DELETE FROM detail_pengadaan_tp WHERE kode_detail_pengadaan_tp = '$kode_detail_pengadaan_tp'");  
+        include('../../koneksi.php');
 
-    echo "<script>
-            document.location='../../menu.php?page=detail_pengadaantp&kode_pengadaan_tp=$kode_pengadaan_tp';
-          </script>";
-    
-    if (!$hapus){
-          echo "<script>
-                  alert('Gagal Hapus Data');
-                  document.location='../../menu.php?page=detail_pengadaantp&kode_pengadaan_tp=$kode_pengadaan_tp';
-                </script>";
+        $kode_pengadaan_tp = $_POST['kode_pengadaan_tp'];
+        $kode_detail_pengadaan_tp = $_POST['kode_detail_pengadaan_tp'];
+
+        $hapus = $con->query("DELETE FROM detail_pengadaan_tp WHERE kode_detail_pengadaan_tp = '$kode_detail_pengadaan_tp'");  
+
+        echo "<script>
+                document.location='../../menu.php?page=detail_pengadaantp&kode_pengadaan_tp=$kode_pengadaan_tp';
+            </script>";
+        
+        if (!$hapus){
+            echo "<script>
+                    alert('Gagal Hapus Data');
+                    document.location='../../menu.php?page=detail_pengadaantp&kode_pengadaan_tp=$kode_pengadaan_tp';
+                    </script>";
+        }
+
+    }
+
+    $cek_file_pemanfaatan=$con->query("SELECT COUNT(detail_pemanfaatan.file_pemanfaatan) AS jumlah_file FROM detail_pemanfaatan JOIN inventaris ON detail_pemanfaatan.kode_inventaris = inventaris.kode_inventaris JOIN detail_pengadaan_tp ON inventaris.kode_detail_pengadaan = detail_pengadaan_tp.kode_detail_pengadaan_tp WHERE detail_pengadaan_tp.kode_detail_pengadaan_tp = '$_POST[kode_detail_pengadaan_tp]'");
+    $jumlah_file=mysqli_fetch_assoc($cek_file_pemanfaatan);
+
+    if ($jumlah_file['jumlah_file'] < 1) {
+
+        hapus_detail_pengadaan_tp();
+        
+    } else {
+
+        $file_pemanfaatan = $con->query("SELECT detail_pemanfaatan.file_pemanfaatan FROM detail_pemanfaatan JOIN inventaris ON detail_pemanfaatan.kode_inventaris = inventaris.kode_inventaris JOIN detail_pengadaan_tp ON detail_pengadaan_tp.kode_detail_pengadaan_tp = inventaris.kode_detail_pengadaan WHERE detail_pengadaan_tp.kode_detail_pengadaan_tp = '$_POST[kode_detail_pengadaan_tp]'");
+
+        while($data_surat = mysqli_fetch_assoc($file_pemanfaatan)){
+
+            $lokasi_file = '../../file_pemanfaatan/'.$data_surat['file_pemanfaatan'];
+            $status=unlink($lokasi_file);
+
+        }
+
+        if($status){
+
+            hapus_detail_pengadaan_tp();
+
+        } else {
+            
+            $kode_pengadaan_tp = $_POST['kode_pengadaan_tp'];
+
+            echo "<script>
+                        alert('Gagal Hapus Data Detail Pengadaan');
+                        document.location='../../menu.php?page=detail_pengadaantp&kode_pengadaan_tp=$kode_pengadaan_tp';
+                    </script>";
+
+        }
     }
 }
 

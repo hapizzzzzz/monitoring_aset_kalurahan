@@ -52,8 +52,7 @@ if(isset($_POST['bSimpan'])){
                     biaya_kontribusi,
                     keterangan_pemanfaatan,
                     awal_pemanfaatan,
-                    akhir_pemanfaatan,
-                    status_pemanfaatan) VALUES (
+                    akhir_pemanfaatan) VALUES (
                         '$kode_detail_pemanfaatan',
                         '$kode_pemanfaatan',
                         '$pilihan_aset',
@@ -64,8 +63,7 @@ if(isset($_POST['bSimpan'])){
                         '$biaya_kontribusi',
                         '$keterangan',
                         '$awal_periode_pemanfaatan',
-                        '$akhir_periode_pemanfaatan',
-                        'Berlangsung')");
+                        '$akhir_periode_pemanfaatan')");
                 
                 if (!$simpan) {
                     echo "<script>
@@ -125,8 +123,7 @@ if(isset($_POST['bSimpan'])){
                     biaya_kontribusi,
                     keterangan_pemanfaatan,
                     awal_pemanfaatan,
-                    akhir_pemanfaatan,
-                    status_pemanfaatan) VALUES (
+                    akhir_pemanfaatan) VALUES (
                         '$kode_dpn_baru',
                         '$kode_pemanfaatan',
                         '$pilihan_aset',
@@ -137,8 +134,7 @@ if(isset($_POST['bSimpan'])){
                         '$biaya_kontribusi',
                         '$keterangan',
                         '$awal_periode_pemanfaatan',
-                        '$akhir_periode_pemanfaatan',
-                        'Berlangsung')");
+                        '$akhir_periode_pemanfaatan')");
                 
                 if (!$simpan) {
                     echo "<script>
