@@ -15,9 +15,6 @@ if(isset($_POST['bSimpan'])){
     $periodeawal = $_POST['prperiode_rpjmawal'];
     $periodeakhir = $_POST['prperiode_rpjmakhir'];
     $thnrkp = $_POST['prthn_rkp'];
-    
-    // $zeroawal = sprintf("%02d", $norpjm);
-    // $zeroakhir = sprintf("%02d", $norkp);
 
     $digit_awalrpjm = substr($periodeawal,-2);
     $digit_akhirrpjm = substr($periodeakhir,-2);
@@ -67,29 +64,62 @@ if($data['jmlkode'] < 1){
 }
 
 if(isset($_POST['bHapus'])){
-    // $hapusdpd = $con->query("DELETE FROM detail_pengadaan WHERE kode_pengadaan = ANY(
-    //     SELECT kode_pengadaan FROM pengadaan
-    //     WHERE kode_perencanaan='$_POST[pkode]')");
-    // $hapuspd = $con->query("DELETE FROM pengadaan WHERE kode_perencanaan = '$_POST[pkode]'");
-    // $hapus_detail = $con->query("DELETE FROM detail_perencanaan WHERE kode_perencanaan = '$_POST[pkode]'");
-    // if($hapus_detail){
-    $hapus = $con->query("DELETE FROM perencanaan WHERE kode_perencanaan = '$_POST[pkode]'");
 
-    if($hapus){
-        echo "<script>
-                  document.location='../../menu.php?page=perencanaan';
-               </script>";
-    } else {
-          echo "<script>
-                  alert('Gagal Hapus Data');
-                  document.location='../../menu.php?page=perencanaan';
+    function hapus_perencanaan(){
+
+        include('../../koneksi.php');
+
+        $hapus = $con->query("DELETE FROM perencanaan WHERE kode_perencanaan = '$_POST[pkode]'");
+
+        if($hapus){
+            echo "<script>
+                    document.location='../../menu.php?page=perencanaan';
                 </script>";
+        } else {
+            echo "<script>
+                    alert('Gagal Hapus Data');
+                    document.location='../../menu.php?page=perencanaan';
+                </script>";
+        }
+    }
+
+    $cek_file_pemanfaatan = $con->query("SELECT COUNT(detail_pemanfaatan.file_pemanfaatan) AS jumlah_file FROM perencanaan JOIN detail_perencanaan ON perencanaan.kode_perencanaan = detail_perencanaan.kode_perencanaan
+                                         JOIN detail_pengadaan ON detail_pengadaan.kode_detail_perencanaan = detail_perencanaan.kode_detail_perencanaan
+                                         JOIN inventaris ON detail_pengadaan.kode_detail_pengadaan = inventaris.kode_detail_pengadaan JOIN detail_pemanfaatan ON detail_pemanfaatan.kode_inventaris = inventaris.kode_inventaris
+                                         WHERE perencanaan.kode_perencanaan = '$_POST[pkode]'");
+    
+    $jumlah_file = mysqli_fetch_assoc($cek_file_pemanfaatan);
+
+    if($jumlah_file['jumlah_file'] < 1){
+        hapus_perencanaan();
+    } else {
+        
+        $file_pemanfaatan = $con->query("SELECT detail_pemanfaatan.file_pemanfaatan FROM perencanaan JOIN detail_perencanaan ON perencanaan.kode_perencanaan = detail_perencanaan.kode_perencanaan
+                                         JOIN detail_pengadaan ON detail_pengadaan.kode_detail_perencanaan = detail_perencanaan.kode_detail_perencanaan
+                                         JOIN inventaris ON detail_pengadaan.kode_detail_pengadaan = inventaris.kode_detail_pengadaan JOIN detail_pemanfaatan ON detail_pemanfaatan.kode_inventaris = inventaris.kode_inventaris
+                                         WHERE perencanaan.kode_perencanaan = '$_POST[pkode]'");
+
+        while ($surat_perjanjian = mysqli_fetch_assoc($file_pemanfaatan)){
+            
+            $lokasi_file = '../../file_pemanfaatan/'.$surat_perjanjian['file_pemanfaatan'];
+            $status=unlink($lokasi_file);
+
+        }
+
+        if($status){
+            hapus_perencanaan();
+        } else {
+            echo "<script>
+                    alert('Gagal Hapus Data Perencanaan');
+                    document.location='../../menu.php?page=perencanaan';
+                </script>";
+        }
     }
 } 
-// }
+
 
 if(isset($_POST['bUbah'])){
-    // $periode_rpjm = $_POST['pawalrpjm']." S.d ".$_POST['pakhirrpjm'];
+
     $ubah = $con->query("UPDATE perencanaan SET
         no_rpjm = '$_POST[pnorpjm]',
         tanggal_rpjm = '$_POST[ptglrpjm]',

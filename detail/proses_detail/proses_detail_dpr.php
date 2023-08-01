@@ -134,18 +134,58 @@ if(isset($_POST['bUbah'])){
 }
 
 
-if(isset($_POST['bHapus'])){ 
+if(isset($_POST['bHapus'])){
 
-    $hdetail_pengadaan = $con->query("DELETE FROM detail_pengadaan WHERE kode_detail_perencanaan = '$_POST[dpkode]'");
-    $hapus = $con->query("DELETE FROM detail_perencanaan WHERE kode_detail_perencanaan = '$_POST[dpkode]'");
-    if($hapus){
-        echo "<script>
-                document.location='../../menu.php?page=detail_perencanaan&kode_perencanaan=$_GET[kode_perencanaan]';
-              </script>";
+    function hapus_detail_perencanaan(){
+
+        include ('../../koneksi.php');
+
+        $hdetail_pengadaan = $con->query("DELETE FROM detail_pengadaan WHERE kode_detail_perencanaan = '$_POST[dpkode]'");
+        $hapus = $con->query("DELETE FROM detail_perencanaan WHERE kode_detail_perencanaan = '$_POST[dpkode]'");
+        if($hapus){
+            echo "<script>
+                    document.location='../../menu.php?page=detail_perencanaan&kode_perencanaan=$_GET[kode_perencanaan]';
+                </script>";
+        } else {
+            echo "<script>
+                    alert('Gagal Hapus Data');
+                </script>";
+        }
+
+    }
+
+    $cek_file_pemanfaatan = $con->query("SELECT COUNT(detail_pemanfaatan.file_pemanfaatan) AS jumlah_file FROM detail_perencanaan JOIN detail_pengadaan ON detail_perencanaan.kode_detail_perencanaan = detail_pengadaan.kode_detail_perencanaan
+                                         JOIN inventaris ON detail_pengadaan.kode_detail_pengadaan = inventaris.kode_detail_pengadaan JOIN detail_pemanfaatan ON inventaris.kode_inventaris = detail_pemanfaatan.kode_inventaris
+                                         WHERE detail_perencanaan.kode_detail_perencanaan = '$_POST[dpkode]'");
+    
+    $jumlah_file = mysqli_fetch_assoc($cek_file_pemanfaatan);
+
+    if($jumlah_file['jumlah_file'] < 1){
+        
+        hapus_detail_perencanaan();
+
     } else {
-        echo "<script>
-                alert('Gagal Hapus Data');
-              </script>";
+
+        $file_pemanfaatan = $con->query("SELECT detail_pemanfaatan.file_pemanfaatan FROM detail_perencanaan JOIN detail_pengadaan ON detail_perencanaan.kode_detail_perencanaan = detail_pengadaan.kode_detail_perencanaan
+                                         JOIN inventaris ON detail_pengadaan.kode_detail_pengadaan = inventaris.kode_detail_pengadaan JOIN detail_pemanfaatan ON inventaris.kode_inventaris = detail_pemanfaatan.kode_inventaris
+                                         WHERE detail_perencanaan.kode_detail_perencanaan = '$_POST[dpkode]'");
+
+        while($surat_perjanjian = mysqli_fetch_assoc($file_pemanfaatan)){
+
+            $lokasi_file = '../../file_pemanfaatan/'.$surat_perjanjian['file_pemanfaatan'];
+            $status=unlink($lokasi_file);
+
+        }
+
+        if($status){
+
+            hapus_detail_perencanaan();
+        
+        } else {
+            echo "<script>
+                    alert('Gagal Hapus Data Detail Perencanaan !');
+                </script>";
+        }
     }
 }
     

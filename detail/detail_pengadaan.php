@@ -35,10 +35,6 @@
 	<!-- Tambah detail pengadaan -->
 	<a href="menu.php?page=tambah_detail_pengadaan&kode_pengadaan=<?=$kode_pengadaan?>" class="btn btn-primary" style="margin-bottom: 3%; font-size: 15px; border-radius: 10px; width: 15%"><i class="bi bi-plus-circle"></i>Tambah Data</a>
 
-	<!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah" style="margin-bottom: 3%; font-size: 15px; border-radius: 10px; width: 15%">
-		<i class="bi bi-plus-circle"></i>Tambah Data
-	</button> -->
-
 	<a href="../aset/cetak/cetak_detail_pengadaan.php?kode_pengadaan=<?php echo $kode_pengadaan ?>" target="_blank" class="btn btn-success" style="margin-bottom: 3%; font-size: 15px; border-radius: 10px; width: 15%" value="val"><i class="bi bi-printer"></i>Cetak</a>
     <table class="table table-sm" cellspacing="0" width="100%" id="table" style="margin-top: 20px;">
 	<thead>

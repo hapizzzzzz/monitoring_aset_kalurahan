@@ -128,6 +128,9 @@ session_start();
         case 'detail_pemanfaatan':
             include "detail/detail_pemanfaatan.php";
             break;
+        case 'riwayat_pemanfaatan':
+            include "detail/riwayat_pemanfaatan.php";
+            break;
         case 'penghapusan':
             include "penghapusan.php";
             break;

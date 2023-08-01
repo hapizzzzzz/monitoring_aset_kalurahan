@@ -2,11 +2,11 @@
     <center><h3 class="judul">Daftar Pemanfaatan</h3></center>
 </div>
 <div class="container">
-	<!-- <a href="menu.php?page=tambah_inventaris" class="btn btn-primary" style="margin-bottom: 3%; font-size: 15px; border-radius: 10px; width: 15%"><i class="bi bi-plus-circle"></i>Tambah Data</a> -->
     <!-- Button trigger modal edit pemanfaatan -->
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah" style="margin-bottom: 3%; font-size: 15px; border-radius: 10px; width: 15%">
 		<i class="bi bi-plus-circle"></i>Tambah Data
     </button>
+	<a href="menu.php?page=riwayat_pemanfaatan" class="btn btn-success" style="margin-bottom: 3%; font-size: 15px; border-radius: 10px; width: 15%"><i class="bi bi-card-list"></i>Riwayat</a>
     <a href="../aset/cetak/cetak_invetaris.php" target="_blank" class="btn btn-success" style="margin-bottom: 3%; font-size: 15px; border-radius: 10px; width: 15%" value="val"><i class="bi bi-printer"></i>Cetak</a>
     <table class="table table-sm" cellspacing="0" width="100%" id="table" style="margin-top: 20px;">
 	<thead>
