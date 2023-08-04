@@ -433,4 +433,153 @@ if (isset($_POST['bUbahTP'])) {
 
 }
 
+if (isset($_POST['bStatus'])) {
+
+    function insert_status_pemanfaatan($kr, $urutan_file){
+
+        include('../../koneksi.php');
+
+        $kode_pemanfaatan = $_POST['kode_pemanfaatan'];
+        $kode_detail_pemanfaatan = $_POST['kode_dpn'];
+
+        $cek_data_pemanfaatan = $con->query("SELECT * FROM pemanfaatan JOIN detail_pemanfaatan ON pemanfaatan.kode_pemanfaatan = detail_pemanfaatan.kode_pemanfaatan WHERE detail_pemanfaatan.kode_detail_pemanfaatan = '$kode_detail_pemanfaatan'");
+        $data_pemanfaatan = mysqli_fetch_assoc($cek_data_pemanfaatan);
+
+        $nama_partner = $data_pemanfaatan['nama_partner'];
+        $no_hp = $data_pemanfaatan['no_telp'];
+        $email_partner = $data_pemanfaatan['email'];
+        $alamat = $data_pemanfaatan['alamat'];
+        $no_perdes = $data_pemanfaatan['no_perdes'];
+        $tahun_perdes = $data_pemanfaatan['tahun_perdes'];
+        $tanggal_perdes = $data_pemanfaatan['tanggal_terbit_perdes'];
+    
+        $nama_aset = $_POST['nama_aset'];
+        $jumlah_p = $_POST['jumlah_dpn'];
+        $bentuk_pemanfaatan = $_POST['bentuk_pemanfaatan'];
+        $biaya_kontribusi = $_POST['biaya_kontribusi'];
+        $awal_pemanfaaatan = $_POST['awal_pemanfaatan'];
+        $akhir_pemanfaatan = $_POST['akhir_pemanfaatan'];
+        $keterangan = $_POST['keterangan'];
+        $no_surat_perjanjian = $_POST['no_surat_perjanjian'];
+        $satuan = $_POST['satuan_dpn'];
+        $file_pemanfaatan = $_POST['nama_file'];
+
+        $file_riwayat = "Surat Perjanjian_R".$tahun_perdes.$urutan_file.".pdf";
+
+            $tambah_riwayat = $con->query("INSERT INTO transaksi_pemanfaatan_selesai (
+                kode_riwayat_pemanfaatan,
+                nama_partner,
+                no_hp,
+                email_partner,
+                alamat,
+                no_perdes,
+                tahun_perdes,
+                tanggal_perdes,
+                nama_aset,
+                jumlah_p,
+                satuan_p,
+                bentuk_pemanfaatan,
+                biaya_kontribusi,
+                awal_pemanfaatan,
+                akhir_pemanfaatan,
+                keterangan,
+                no_surat_perjanjian,
+                file_pemanfaatan) VALUES (
+                    '$kr',
+                    '$nama_partner',
+                    '$no_hp',
+                    '$email_partner',
+                    '$alamat',
+                    '$no_perdes',
+                    '$tahun_perdes',
+                    '$tanggal_perdes',
+                    '$nama_aset',
+                    '$jumlah_p',
+                    '$satuan',
+                    '$bentuk_pemanfaatan',
+                    '$biaya_kontribusi',
+                    '$awal_pemanfaaatan',
+                    '$akhir_pemanfaatan',
+                    '$keterangan',
+                    '$no_surat_perjanjian',
+                    '$file_riwayat'
+                )");
+
+
+            $cek_kuota = $con->query("SELECT jumlah_kuota FROM kuota_aset WHERE kode_inventaris = '$_POST[kode_inv]'");
+            $data_kuota = mysqli_fetch_assoc($cek_kuota);
+
+            $kuota_kembali = $data_kuota['jumlah_kuota'] + $jumlah_p;
+
+            $pulihkan_kuota = $con->query("UPDATE kuota_aset SET jumlah_kuota = '$kuota_kembali' WHERE kode_inventaris = '$_POST[kode_inv]'");
+
+            if($pulihkan_kuota){
+
+                $hapus_detail_pemanfaatan = $con->query("DELETE FROM detail_pemanfaatan WHERE kode_detail_pemanfaatan = '$kode_detail_pemanfaatan'");
+
+            }
+
+            echo "<script>
+                    document.location='../../menu.php?page=detail_pemanfaatan&kode_pemanfaatan=$kode_pemanfaatan';
+                </script>";
+
+    }
+
+    $kode_detail_pemanfaatan = $_POST['kode_dpn'];
+
+    $cek_data_pemanfaatan = $con->query("SELECT * FROM pemanfaatan JOIN detail_pemanfaatan ON pemanfaatan.kode_pemanfaatan = detail_pemanfaatan.kode_pemanfaatan WHERE detail_pemanfaatan.kode_detail_pemanfaatan = '$kode_detail_pemanfaatan'");
+    $data_pemanfaatan = mysqli_fetch_assoc($cek_data_pemanfaatan);
+
+    $tahun_perdes = $data_pemanfaatan['tahun_perdes'];
+
+    $cek_riwayat = $con->query("SELECT COUNT(kode_riwayat_pemanfaatan) AS jumlah_riwayat FROM transaksi_pemanfaatan_selesai WHERE tahun_perdes = '$tahun_perdes'");
+    $jumlah_riwayat = mysqli_fetch_assoc($cek_riwayat);
+
+    function pindah_file($tahun_perdes, $file_pemanfaatan, $urutan_file){
+
+        $file_riwayat = "Surat Perjanjian_R".$tahun_perdes.$urutan_file;
+        $lokasi_file_pemanfaatan = '../../file_pemanfaatan/'.$file_pemanfaatan;
+        $lokasi_file_riwayat = '../../riwayat_pemanfaatan/'.$file_riwayat.".pdf";
+        $pemanfaatan_to_riwayat = rename($lokasi_file_pemanfaatan,$lokasi_file_riwayat);   
+
+    }
+    
+    if($jumlah_riwayat['jumlah_riwayat'] < 1){
+
+        $tahun_perdes = $data_pemanfaatan['tahun_perdes'];
+        $kode_riwayat_pemanfaatan = "R".$tahun_perdes."00000001";
+        
+        pindah_file($tahun_perdes, $_POST['nama_file'], "00000001");
+
+        insert_status_pemanfaatan($kode_riwayat_pemanfaatan, "00000001");
+
+    } else {
+
+        $kode_riwayat = [];
+
+        $tahun_perdes = $data_pemanfaatan['tahun_perdes'];
+        
+        $data_riwayat = $con->query("SELECT SUBSTR(kode_riwayat_pemanfaatan,6) AS kode_riwayat_pemanfaatan FROM transaksi_pemanfaatan_selesai WHERE tahun_perdes = '$tahun_perdes'");
+
+        while($data_kode_riwayat = mysqli_fetch_assoc($data_riwayat)){
+            $kode_riwayat[] = $data_kode_riwayat['kode_riwayat_pemanfaatan'];
+        }
+
+        $int_data_riwayat = array_map('intval',$kode_riwayat);
+
+        $urutan_baru = max($int_data_riwayat) + 1;
+
+        $urutan_kode_baru = sprintf('%08d', $urutan_baru);        
+
+        $kode_riwayat_pemanfaatan = "R".$tahun_perdes.$urutan_kode_baru;
+
+        pindah_file($tahun_perdes, $_POST['nama_file'], $urutan_kode_baru);
+        
+        insert_status_pemanfaatan($kode_riwayat_pemanfaatan, $urutan_kode_baru);
+
+    }
+}
+
+
+
 ?>

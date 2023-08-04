@@ -95,6 +95,59 @@
 			</td></center>
 		</tr>
 
+		<!-- Awal Modal Status -->
+		<div class="modal fade" id="modalStatus<?=$nomor?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  				<div class="modal-dialog">
+    				<div class="modal-content">
+      					<div class="modal-header">
+        					<h5 class="modal-title" id="staticBackdropLabel">Konfirmasi !</h5>
+        					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      					</div>
+	  					<form method="POST" action="detail/proses_detail/proses_detail_pemanfaatan.php">
+
+						  	<input type="hidden" name="kode_pemanfaatan" value="<?=$kode_pemanfaatan?>">
+						  	<input type="hidden" name="kode_dpn" value="<?=$pecah['kode_detail_pemanfaatan']?>">
+							<input type="hidden" name="nama_aset" value="<?=$pecah['aset_perencanaan']?>">
+							<input type="hidden" name="jumlah_dpn" value="<?=$pecah['jumlah_aset_p']?>">
+							<input type="hidden" name="satuan_dpn" value="<?=$pecah['satuan']?>">
+							<input type="hidden" name="bentuk_pemanfaatan" value="<?=$pecah['bentuk_pemanfaatan']?>">
+							<input type="hidden" name="biaya_kontribusi" value="<?=$pecah['biaya_kontribusi']?>">
+							<input type="hidden" name="awal_pemanfaatan" value="<?=$pecah['awal_pemanfaatan']?>">
+							<input type="hidden" name="akhir_pemanfaatan" value="<?=$pecah['akhir_pemanfaatan']?>">
+							<input type="hidden" name="keterangan" value="<?=$pecah['keterangan_pemanfaatan']?>">
+							<input type="hidden" name="no_surat_perjanjian" value="<?=$pecah['no_surat_perjanjian']?>">
+							<input type="hidden" name="nama_file" value="<?=$pecah['file_pemanfaatan']?>">
+
+							<input type="hidden" name="kode_inv" value="<?=$pecah['kode_inventaris']?>">
+
+	  						<div class="modal-body">
+
+							  	<div class="text-danger"><h5 class="text-center">Transaksi Sudah Selesai ?</h5></div>
+								<hr>
+								
+								<h6><b>Nama Aset : </b></h6>
+								<h5 class="ddpd"><?=$pecah['aset_perencanaan']." ( ".$pecah['jumlah_aset_p']." ) "?></h5>
+								<hr>
+								<h6><b>Bentuk Pemanfaatan : </b></h6>
+								<h5 class="ddpd"><?=$pecah['bentuk_pemanfaatan']?></h5>
+								<hr>
+								<h6><b>Jangka Waktu : </b></h6>
+								<h5 class="ddpd"><?=date('d/m/Y', strtotime($pecah['awal_pemanfaatan']))." Sd ".date('d/m/Y', strtotime($pecah['akhir_pemanfaatan']))?></h5>
+								<hr>
+								<h6><b>Keterangan : </b></h6>
+								<h5 class="ddpd"><?=$pecah['keterangan_pemanfaatan']?></h5>
+			
+      						</div>
+      						<div class="modal-footer">
+								<button type="submit" class="btn btn-primary" name="bStatus">Yakin</button>
+        						<button type="button" class="btn btn-warning" data-bs-dismiss="modal">Batal</button>
+      						</div>
+						</form>
+    				</div>
+  				</div>
+			</div>
+		<!--  Akhir Modal Status -->
+
 		<!-- Awal Modal Hapus Detail Pemanfaatan-->
 		<div class="modal fade" id="modalHapus<?=$nomor?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   				<div class="modal-dialog">
@@ -268,6 +321,59 @@
 				
 			</td></center>
 		</tr>
+
+		<!-- Awal Modal Status -->
+		<div class="modal fade" id="modalStatus<?=$nomor?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  				<div class="modal-dialog">
+    				<div class="modal-content">
+      					<div class="modal-header">
+        					<h5 class="modal-title" id="staticBackdropLabel">Konfirmasi !</h5>
+        					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      					</div>
+	  					<form method="POST" action="detail/proses_detail/proses_detail_pemanfaatan.php">
+
+						  	<input type="hidden" name="kode_pemanfaatan" value="<?=$kode_pemanfaatan?>">
+						  	<input type="hidden" name="kode_dpn" value="<?=$pecah_tp['kode_detail_pemanfaatan']?>">
+							<input type="hidden" name="nama_aset" value="<?=$pecah_tp['nama_barang_tp']?>">
+							<input type="hidden" name="jumlah_dpn" value="<?=$pecah_tp['jumlah_aset_p']?>">
+							<input type="hidden" name="satuan_dpn" value="<?=$pecah['satuan']?>">
+							<input type="hidden" name="bentuk_pemanfaatan" value="<?=$pecah_tp['bentuk_pemanfaatan']?>">
+							<input type="hidden" name="biaya_kontribusi" value="<?=$pecah_tp['biaya_kontribusi']?>">
+							<input type="hidden" name="awal_pemanfaatan" value="<?=$pecah_tp['awal_pemanfaatan']?>">
+							<input type="hidden" name="akhir_pemanfaatan" value="<?=$pecah_tp['akhir_pemanfaatan']?>">
+							<input type="hidden" name="keterangan" value="<?=$pecah_tp['keterangan_pemanfaatan']?>">
+							<input type="hidden" name="no_surat_perjanjian" value="<?=$pecah_tp['no_surat_perjanjian']?>">
+							<input type="hidden" name="nama_file" value="<?=$pecah_tp['file_pemanfaatan']?>">
+
+							<input type="hidden" name="kode_inv" value="<?=$pecah_tp['kode_inventaris']?>">
+
+	  						<div class="modal-body">
+
+							  	<div class="text-danger"><h5 class="text-center">Transaksi Sudah Selesai ?</h5></div>
+								<hr>
+								
+								<h6><b>Nama Aset : </b></h6>
+								<h5 class="ddpd"><?=$pecah_tp['nama_barang_tp']." ( ".$pecah_tp['jumlah_aset_p']." ) "?></h5>
+								<hr>
+								<h6><b>Bentuk Pemanfaatan : </b></h6>
+								<h5 class="ddpd"><?=$pecah_tp['bentuk_pemanfaatan']?></h5>
+								<hr>
+								<h6><b>Jangka Waktu : </b></h6>
+								<h5 class="ddpd"><?=date('d/m/Y', strtotime($pecah_tp['awal_pemanfaatan']))." Sd ".date('d/m/Y', strtotime($pecah_tp['akhir_pemanfaatan']))?></h5>
+								<hr>
+								<h6><b>Keterangan : </b></h6>
+								<h5 class="ddpd"><?=$pecah_tp['keterangan_pemanfaatan']?></h5>
+			
+      						</div>
+      						<div class="modal-footer">
+								<button type="submit" class="btn btn-primary" name="bStatus">Yakin</button>
+        						<button type="button" class="btn btn-warning" data-bs-dismiss="modal">Batal</button>
+      						</div>
+						</form>
+    				</div>
+  				</div>
+			</div>
+		<!--  Akhir Modal Status -->
 
 		<!-- Awal Modal Hapus Detail Pemanfaatan TP-->
 		<div class="modal fade" id="modalHapusTP<?=$nomor?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
