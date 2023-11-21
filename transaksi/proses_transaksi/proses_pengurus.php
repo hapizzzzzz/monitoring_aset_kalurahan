@@ -206,6 +206,26 @@ if(isset($_POST['bUbah'])){
                     document.location='../../menu.php?page=pengurus';
               </script>";
     }
-  }
+}
 
+if(isset($_POST['bUbahUS'])){
+
+    $eusername = $_POST['eusername'];
+    $epassword = $_POST['epassword'];
+
+    $ubah_us = $con->query("UPDATE user_admin SET
+        username = '$eusername',
+        password = '$epassword'");
+
+    if($ubah_us){
+        echo "<script>
+                    document.location='../../menu.php?page=pengurus';
+              </script>";
+    } else {
+        echo "<script>
+                    alert('Gagal Ubah Data');
+                    document.location='../../menu.php?page=pengurus';
+              </script>";
+    }
+}
 ?>

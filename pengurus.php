@@ -7,6 +7,10 @@
 	<button onclick="kosong()" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalTambah" style="margin-bottom: 3%; font-size: 15px; border-radius: 10px; width: 15%">
 		<i class="bi bi-plus-circle"></i>Tambah Data
 	</button>
+	<!-- Button trigger modal ubah username password -->
+	<button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modalunm_pass" style="margin-bottom: 3%; font-size: 15px; border-radius: 10px; width: 15%">
+		<i class="bi bi-pencil"></i>Ubah Password
+	</button>
 
     <table class="table table-sm" cellspacing="0" width="100%" id="table" style="margin-top: 20px;">
 	<thead>
@@ -151,6 +155,42 @@
   </div>
 </div>
 <!--  Akhir Modal Tambah Pengurus-->
+
+<!-- Awal Modal Edit unm_pass-->
+<div class="modal fade modal-lg" id="modalunm_pass" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  			<div class="modal-dialog">
+    			<div class="modal-content">
+      				<div class="modal-header">
+        				<h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Username & Password</h1>
+        				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      				</div>
+	  				<form method="POST" action="transaksi/proses_transaksi/proses_pengurus.php">
+      					<div class="modal-body">
+							
+							<?php
+								$tampil_unm_pss = $con->query("SELECT * FROM user_admin");
+								$unm_pss = mysqli_fetch_assoc($tampil_unm_pss);
+							?>
+
+                            <!-- <input type="hidden" name="username" value="<?php //$unm_pss['username']?>"> -->
+							<div class="mb-3">
+    							<label class="form-label"><b>Username</b></label>
+    							<input type="text" class="form-control" name="eusername" value="<?=$unm_pss['username']?>" required>
+  							</div>
+  							<div class="mb-3">
+    							<label class="form-label"><b>Password</b></label>
+    							<input type="text" class="form-control" name="epassword" value="<?=$unm_pss['password']?>" required>
+  							</div>
+      						<div class="modal-footer">
+		  						<button type="submit" class="btn btn-primary" name="bUbahUS">Ubah</button>
+        						<button type="button" class="btn btn-warning" data-bs-dismiss="modal">Batal</button>
+      						</div>
+						</div>
+					</form>
+    			</div>
+  			</div>
+		</div>
+<!--  Akhir Modal Edit unm_pss-->
 
 </div>
 

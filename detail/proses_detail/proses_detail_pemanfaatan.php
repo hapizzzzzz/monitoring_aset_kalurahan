@@ -14,7 +14,7 @@ if(isset($_POST['bSimpan'])){
     $awal_periode_pemanfaatan = $_POST['awal_periode_pemanfaatan'];
     $akhir_periode_pemanfaatan = $_POST['akhir_periode_pemanfaatan'];
 
-    $dkpn = substr($kode_pemanfaatan, 2);
+    $dkpn = substr($kode_pemanfaatan, 2, 6);
 
     $cek_kuota=$con->query("SELECT jumlah_kuota FROM kuota_aset WHERE kode_inventaris = '$pilihan_aset'");
     $jml_kuota = mysqli_fetch_assoc($cek_kuota);
@@ -37,7 +37,7 @@ if(isset($_POST['bSimpan'])){
             $jumkdp = mysqli_fetch_assoc($cek_kode_pemanfaatan);
             
             if($jumkdp['jumkdp'] < 1){
-                $kode_detail_pemanfaatan = "DN".$dkpn."00001";
+                $kode_detail_pemanfaatan = "DN".$dkpn."0001";
 
                 $namabaru_surat_perjanjian = "Surat perjanjian_".$kode_detail_pemanfaatan.".pdf";
         
@@ -94,7 +94,7 @@ if(isset($_POST['bSimpan'])){
 
                 $kode_dpn = array();
 
-                $cek_kode_ada = $con->query("SELECT SUBSTR(kode_detail_pemanfaatan, 8) AS kode_detail_pemanfaatan FROM detail_pemanfaatan WHERE kode_pemanfaatan = '$kode_pemanfaatan'");
+                $cek_kode_ada = $con->query("SELECT SUBSTR(kode_detail_pemanfaatan, 9) AS kode_detail_pemanfaatan FROM detail_pemanfaatan WHERE kode_pemanfaatan = '$kode_pemanfaatan'");
                 
                 while($data_kode_ada = mysqli_fetch_assoc($cek_kode_ada)){
                     $kode_dpn[] = $data_kode_ada['kode_detail_pemanfaatan'];
@@ -106,7 +106,11 @@ if(isset($_POST['bSimpan'])){
 
                 $urutan_baru = $kode_terakhir_dpn + 1;
 
-                $data_urutan_baru = sprintf('%05d', $urutan_baru);
+                $data_urutan_baru = sprintf('%04d', $urutan_baru);
+
+                // echo $dkpn."<br>";
+
+                // echo $kode_terakhir_dpn;
 
                 $kode_dpn_baru = "DN".$dkpn.$data_urutan_baru;
 
@@ -452,7 +456,9 @@ if (isset($_POST['bStatus'])) {
         $no_perdes = $data_pemanfaatan['no_perdes'];
         $tahun_perdes = $data_pemanfaatan['tahun_perdes'];
         $tanggal_perdes = $data_pemanfaatan['tanggal_terbit_perdes'];
+        $tahun_pemanfaatan = $data_pemanfaatan['tahun_pemanfaatan'];
     
+        $kode_inventaris = $_POST['kode_inv'];
         $nama_aset = $_POST['nama_aset'];
         $jumlah_p = $_POST['jumlah_dpn'];
         $bentuk_pemanfaatan = $_POST['bentuk_pemanfaatan'];
@@ -463,6 +469,12 @@ if (isset($_POST['bStatus'])) {
         $no_surat_perjanjian = $_POST['no_surat_perjanjian'];
         $satuan = $_POST['satuan_dpn'];
         $file_pemanfaatan = $_POST['nama_file'];
+
+        $kode_jenis = $_POST['kode_jns'];
+        $pilihan_jenis_barang = $con->query("SELECT nama_kelompok FROM jenis_barang WHERE kode_jenis = '$kode_jenis'");
+        $pilih_jenis_barang = mysqli_fetch_assoc($pilihan_jenis_barang);
+
+        $jenis_barang = $pilih_jenis_barang['nama_kelompok'];
 
         $file_riwayat = "Surat Perjanjian_R".$tahun_perdes.$urutan_file.".pdf";
 
@@ -475,6 +487,9 @@ if (isset($_POST['bStatus'])) {
                 no_perdes,
                 tahun_perdes,
                 tanggal_perdes,
+                tahun_pemanfaatan,
+                jenis_barang,
+                kode_inventaris,
                 nama_aset,
                 jumlah_p,
                 satuan_p,
@@ -493,6 +508,9 @@ if (isset($_POST['bStatus'])) {
                     '$no_perdes',
                     '$tahun_perdes',
                     '$tanggal_perdes',
+                    '$tahun_pemanfaatan',
+                    '$jenis_barang',
+                    '$kode_inventaris',
                     '$nama_aset',
                     '$jumlah_p',
                     '$satuan',

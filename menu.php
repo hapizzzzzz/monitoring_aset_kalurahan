@@ -1,6 +1,13 @@
 <?php
 include ('koneksi.php');
 session_start();
+
+if (!isset($_SESSION['username'])){
+    echo "<script>
+            document.location='index.php';
+        </script>";
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -43,6 +50,9 @@ session_start();
     <!-- <div class="header"><img src="gambar/logo.png" alt="logo" align="right" style="width:60px; margin:2px"></div> -->
     <div class="sidebar p-4 bg-primary">
         <H4 class="mb-5 text-white">Aset Kalurahan Sendangtirto</H4>
+        <li onclick="location.href='menu.php?page=dashboard'">
+            <a class="text-white" href="menu.php?page=dashboard"><i class="bi bi-box"></i></i>Dashboard</a>
+        </li>
         <li onclick="location.href='menu.php?page=pengurus'">
             <a class="text-white" href="menu.php?page=pengurus"><i class="bi bi-person"></i>Pengurus</a>
         </li>
@@ -70,6 +80,9 @@ session_start();
         <li onclick="location.href='menu.php?page=penghapusan'">
             <a class="text-white" href="menu.php?page=penghapusan"><i class="bi bi-eraser"></i>Penghapusan</a>
         </li>
+        <li onclick="location.href='menu.php?page=logout'">
+            <a class="text-white" href="menu.php?page=logout"><i class="bi bi-box-arrow-right"></i>Keluar</a>
+        </li>
     </div>
 
     <?php
@@ -77,6 +90,9 @@ session_start();
         $page = $_GET['page'];
     
     switch ($page) {
+        case 'dashboard':
+            include "dashboard.php";
+            break;
         case 'perencanaan':
             include "perencanaan.php";
             break;
@@ -133,6 +149,15 @@ session_start();
             break;
         case 'penghapusan':
             include "penghapusan.php";
+            break;
+        case 'detail_penghapusan':
+            include "detail/detail_penghapusan.php";
+            break;
+        case 'tambah_detail_penghapusan':
+            include "transaksi/tambah_detail_penghapusan.php";
+            break;
+        case 'logout':
+            include "logout.php";
             break;
         default:
             echo "<h1 style='margin-left:10cm'>Halaman tidak ditemukan</h1>";

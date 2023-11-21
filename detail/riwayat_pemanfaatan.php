@@ -4,6 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Riwayat Pemanfaatan</title>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery.js"
+        integrity="sha512-eSeh0V+8U3qoxFnK3KgBsM69hrMOGMBy3CNxq/T4BArsSQJfKVsKb5joMqIPrNMjRQSTl4xG8oJRpgU2o9I7HQ=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    ></script>
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.css"
+        integrity="sha512-0nkKORjFgcyxv3HbE4rzFUlENUMNqic/EzDIeYCgsKa/nwqr2B91Vu/tNAu4Q0cBuG4Xe/D1f/freEci/7GDRA=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"
+    />
+    <script>
+        $(document).ready(function () {
+            $(".ch").chosen({
+            width: "100%",
+            no_results_text: "Oops, nothing found!",
+            allow_single_deselect: true,
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="lingkaran">
@@ -11,7 +33,10 @@
     </div>
 
     <div class="container">
-
+        <!-- Button trigger modal cetak riwayat pemanfaatan -->
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCetak" style="margin-bottom: 3%; font-size: 15px; border-radius: 10px; width: 15%">
+            <i class="bi bi-printer"></i>Cetak
+        </button>
         <table class="table table-sm" cellspacing="0" width="100%" id="table" style="margin-top: 20px;">
         <thead>
             <tr>
@@ -22,6 +47,7 @@
                 <th><center>Jumlah</center></th>
                 <th><center>Bentuk Pemanfaatan</center></th>
                 <th><center>Jangka Waktu</center></th>
+                <th><center>Tahun Pemanfaatan</center></th>
                 <th style="width: 10%"></th>
             </tr>
         </thead>
@@ -38,6 +64,7 @@
                 <td><center><?php echo $pecah['jumlah_p'] ." ".$pecah['satuan_p']?></center></td>
                 <td><center><?php echo $pecah['bentuk_pemanfaatan']?></center></td>
                 <td><center><?php echo date('d/m/Y', strtotime($pecah['awal_pemanfaatan']))." Sd ".date('d/m/Y', strtotime($pecah['akhir_pemanfaatan']))?></center></td>
+                <td><center><?php echo $pecah['tahun_pemanfaatan']?></center></td>
                 <td><center>
                     
                     <!-- Button trigger modal hapus barang -->
@@ -51,6 +78,37 @@
                     
                 </td></center>
             </tr>
+
+            <!-- Awal Modal Cetak Riwayat Pemanfaatan-->
+            <div class="modal fade" id="modalCetak" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" class="text-danger" id="staticBackdropLabel">Pilih Tahun Riwayat Pemanfaatan</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="../aset/cetak/cetak_riwayat_pemanfaatan.php?" target="_blank">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <select class="ch" name="pilihan_tahun_riwayat_pemanfaaatan">
+                                <?php
+                                    $pilih_tahun = $con->query("SELECT DISTINCT tahun_pemanfaatan FROM transaksi_pemanfaatan_selesai");
+                                    while($pilihan_tahun=$pilih_tahun->fetch_assoc()){
+                                ?>
+                                <option value="<?= $pilihan_tahun['tahun_pemanfaatan']?>"><?= $pilihan_tahun['tahun_pemanfaatan']?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success" name="bSimpan">Cetak</button>
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Batal</button>
+                    </div>
+                </form>
+                </div>
+            </div>
+            </div>
+            <!--  Akhir Modal Cetak Riwayat Pemanfaatan-->
 
             <!-- Awal Modal Hapus Detail Pemanfaatan-->
             <div class="modal fade" id="modalHapus<?=$nomor?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -79,6 +137,9 @@
                                     <h6><b>Jangka Waktu : </b></h6>
                                     <h5 class="ddpd"><?=date('d/m/Y', strtotime($pecah['awal_pemanfaatan']))." Sampai dengan ".date('d/m/Y', strtotime($pecah['akhir_pemanfaatan']))?></h5>
                                     <hr>
+                                    <h6><b>Tahun Pemanfaatan : </b></h6>
+                                    <h5 class="ddpd"><?=$pecah['tahun_pemanfaatan']?></h5>
+                                    <hr>
                                     <h6><b>Keterangan : </b></h6>
                                     <h5 class="ddpd"><?=$pecah['keterangan']?></h5>
 
@@ -98,7 +159,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" class="text-danger" id="staticBackdropLabel">Detail Pemanfaatan</h5>
+                    <h5 class="modal-title" class="text-danger" id="staticBackdropLabel">Detail Riwayat Pemanfaatan</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -125,6 +186,9 @@
                     <hr>
                     <h6><b>Tanggal Perdes : </b></h6>
                     <h5 class="ddpd"><?=$pecah['tanggal_perdes'];?></h5>
+                    <hr>
+                    <h6><b>Tahun Pemanfaatan : </b></h6>
+                    <h5 class="ddpd"><?=$pecah['tahun_pemanfaatan'];?></h5>
                     <hr>
                     <h6><b>Nama Aset : </b></h6>
                     <h5 class="ddpd"><?=$pecah['nama_aset'];?></h5>

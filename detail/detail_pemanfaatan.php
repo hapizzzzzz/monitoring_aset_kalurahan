@@ -41,6 +41,7 @@
 		</tr>
         <tr>
 			<td><h4 class="rincian" rowspan="2">Alamat : <?php echo $data_pemanfaatan['alamat']?></h4></td>
+			<td><h4 class="rincian" rowspan="2">Tahun Pemanfaatan : <?php echo $data_pemanfaatan['tahun_pemanfaatan']?></h4></td>
 		</tr>
 	</table>
 
@@ -107,6 +108,8 @@
 
 						  	<input type="hidden" name="kode_pemanfaatan" value="<?=$kode_pemanfaatan?>">
 						  	<input type="hidden" name="kode_dpn" value="<?=$pecah['kode_detail_pemanfaatan']?>">
+							<input type="hidden" name="kode_jns" value="<?=$pecah['kode_jenis']?>">
+							<input type="hidden" name="kode_inv" value="<?=$pecah['kode_inventaris']?>">
 							<input type="hidden" name="nama_aset" value="<?=$pecah['aset_perencanaan']?>">
 							<input type="hidden" name="jumlah_dpn" value="<?=$pecah['jumlah_aset_p']?>">
 							<input type="hidden" name="satuan_dpn" value="<?=$pecah['satuan']?>">
@@ -126,7 +129,7 @@
 								<hr>
 								
 								<h6><b>Nama Aset : </b></h6>
-								<h5 class="ddpd"><?=$pecah['aset_perencanaan']." ( ".$pecah['jumlah_aset_p']." ) "?></h5>
+								<h5 class="ddpd"><?=$pecah['aset_perencanaan']." ( ".$pecah['jumlah_aset_p']." ".$pecah['satuan']." ) "?></h5>
 								<hr>
 								<h6><b>Bentuk Pemanfaatan : </b></h6>
 								<h5 class="ddpd"><?=$pecah['bentuk_pemanfaatan']?></h5>
@@ -334,9 +337,11 @@
 
 						  	<input type="hidden" name="kode_pemanfaatan" value="<?=$kode_pemanfaatan?>">
 						  	<input type="hidden" name="kode_dpn" value="<?=$pecah_tp['kode_detail_pemanfaatan']?>">
+							<input type="hidden" name="kode_jns" value="<?=$pecah_tp['kode_jenis']?>">
+							<input type="hidden" name="kode_inv" value="<?=$pecah_tp['kode_inventaris']?>">
 							<input type="hidden" name="nama_aset" value="<?=$pecah_tp['nama_barang_tp']?>">
 							<input type="hidden" name="jumlah_dpn" value="<?=$pecah_tp['jumlah_aset_p']?>">
-							<input type="hidden" name="satuan_dpn" value="<?=$pecah['satuan']?>">
+							<input type="hidden" name="satuan_dpn" value="<?=$pecah_tp['satuan']?>">
 							<input type="hidden" name="bentuk_pemanfaatan" value="<?=$pecah_tp['bentuk_pemanfaatan']?>">
 							<input type="hidden" name="biaya_kontribusi" value="<?=$pecah_tp['biaya_kontribusi']?>">
 							<input type="hidden" name="awal_pemanfaatan" value="<?=$pecah_tp['awal_pemanfaatan']?>">
@@ -353,7 +358,7 @@
 								<hr>
 								
 								<h6><b>Nama Aset : </b></h6>
-								<h5 class="ddpd"><?=$pecah_tp['nama_barang_tp']." ( ".$pecah_tp['jumlah_aset_p']." ) "?></h5>
+								<h5 class="ddpd"><?=$pecah_tp['nama_barang_tp']." ( ".$pecah_tp['jumlah_aset_p']." ".$pecah_tp['satuan']." ) "?></h5>
 								<hr>
 								<h6><b>Bentuk Pemanfaatan : </b></h6>
 								<h5 class="ddpd"><?=$pecah_tp['bentuk_pemanfaatan']?></h5>
